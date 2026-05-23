@@ -1,32 +1,25 @@
-FROM php:8.2-fpm
+# FROM php:8.2-cli
+FROM php:8.4-fpm
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    nginx \
-    composer \
-    git \
-    curl \
-    libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql \
-    && rm -rf /var/lib/apt/lists/*
+    git unzip curl libzip-dev zip libpng-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
 
-# Set working directory
-WORKDIR /app
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy project files
+WORKDIR /var/www
+
 COPY . .
 
-# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
-RUN chown -R www-data:www-data /app
+RUN cp .env.example .env
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN php artisan key:generate
 
-# Expose port
-EXPOSE 8080
+EXPOSE 10000
 
-# Start nginx and PHP-FPM
-CMD ["sh", "-c", "php-fpm -d variables_order=EGPCS & nginx -g 'daemon off;'"]
+# CMD php artisan serve --host=0.0.0.0 --port=10000
+#kasama pati kasama database hindi muna gagawan ng tables ico-connect databse
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT 
+#hindi kasama pati kasama laman ng database empty ang table
