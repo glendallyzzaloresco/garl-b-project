@@ -1,9 +1,24 @@
-# FROM php:8.2-cli
 FROM php:8.4-fpm
 
-RUN apt-get update && apt-get install -y \
-    git unzip curl libzip-dev zip libpng-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		git \
+		unzip \
+		curl \
+		libzip-dev \
+		libonig-dev \
+		libpng-dev \
+		libjpeg62-turbo-dev \
+		libfreetype6-dev; \
+	docker-php-ext-configure gd --with-freetype --with-jpeg; \
+	docker-php-ext-install -j"$(nproc)" \
+		zip \
+		pdo_mysql \
+		gd \
+		mbstring \
+		bcmath; \
+	rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -11,15 +26,10 @@ WORKDIR /var/www
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN php -r "if (!extension_loaded('gd')) { fwrite(STDERR, 'ext-gd is not enabled\n'); exit(1); } echo 'ext-gd enabled\n';"
 
-RUN cp .env.example .env
-
-RUN php artisan key:generate
+RUN composer install --no-dev -o
 
 EXPOSE 10000
 
-# CMD php artisan serve --host=0.0.0.0 --port=10000
-#kasama pati kasama database hindi muna gagawan ng tables ico-connect databse
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT 
-#hindi kasama pati kasama laman ng database empty ang table
+CMD sh -c "php artisan migrate --force && php artisan db:seed --class=UserSeeder --force && php -S 0.0.0.0:${PORT:-10000} -t public server.php"
