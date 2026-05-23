@@ -61,6 +61,15 @@ class UserController extends Controller
                 if ($role === 'student') {
                     // Get student record and store student_id in session
                     $student = Student::where('user_account_id', $user->id)->first();
+
+                    // Backfill linking for older DBs where the student row exists but
+                    // user_account_id was never set (or was seeded before linkage logic).
+                    if (!$student && $user->email) {
+                        $student = Student::where('email', $user->email)->first();
+                        if ($student && !$student->user_account_id) {
+                            $student->update(['user_account_id' => $user->id]);
+                        }
+                    }
                     if ($student) {
                         Session::put("student_id", $student->id);
                         Session::save(); // Ensure session is saved before redirect
@@ -72,7 +81,10 @@ class UserController extends Controller
                         
                         return redirect()->route('student.dashboard', $student->id)->with('success', 'Successfully logged in!');
                     }
-                    return redirect("/dashboard");
+
+                    return redirect('/')->withErrors([
+                        'username' => 'Student profile is not linked to this account. Please contact the administrator.'
+                    ]);
                 } elseif ($role === 'teacher') {
                     // Redirect to teacher dashboard
                     return redirect("/teacher")->with('success', 'Successfully logged in!');
