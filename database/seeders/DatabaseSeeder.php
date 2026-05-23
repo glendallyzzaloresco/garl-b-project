@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Student;
 use App\Models\Degree;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -28,15 +25,7 @@ class DatabaseSeeder extends Seeder
             'Master of Science',
         ])->map(fn (string $title) => Degree::firstOrCreate(['degree_title' => $title]));
 
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'email_verified_at' => now(),
-                'password' => Hash::make('password'),
-                'remember_token' => Str::random(10),
-            ]
-        );
+        $this->call(UserAccountSeeder::class);
 
         $defaultDegreeId = $degrees->first()?->id;
 
