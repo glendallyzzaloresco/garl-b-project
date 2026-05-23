@@ -10,7 +10,7 @@
         </div>
       </div>
     </td>
-    <td>{{ $teacher->userAccount->email ?? 'N/A' }}</td>
+    <td>{{ $teacher->userAccount?->email ?? $teacher->email ?? 'N/A' }}</td>
     <td>{{ $teacher->phone ?: 'N/A' }}</td>
     <td>{{ $teacher->department ?: 'N/A' }}</td>
     <td><span class="badge">👨‍🏫 Teacher</span></td>
@@ -22,7 +22,7 @@
         <a href="/teachers/{{ $teacher->id }}/edit" class="btn btn-warning">
           <i class="bi bi-pencil"></i> Edit
         </a>
-        <button onclick="deleteTeacher({{ $teacher->id }})" class="btn btn-danger">
+        <button type="button" class="btn btn-danger js-delete-teacher" data-teacher-id="{{ $teacher->id }}">
           <i class="bi bi-trash"></i> Delete
         </button>
       </div>

@@ -5,6 +5,118 @@
 @section('content')
 
 <style>
+  :root {
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+
+    --font-size-sm: 0.85rem;
+    --font-size-base: 0.95rem;
+
+    --bg-surface: #ffffff;
+    --text-main: #1f2937;
+    --text-secondary: #6B7280;
+    --border-light: #E5E7EB;
+    --border: #D1D5DB;
+    --table-head: #f3f4f6;
+    --table-hover: #f9fafb;
+
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --success: #16A34A;
+    --success-light: rgba(22, 163, 74, 0.10);
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.10);
+    --transition-normal: 0.2s ease;
+  }
+
+  .degrees-page {
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .table-wrapper {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+  }
+
+  .modern-table thead {
+    background-color: var(--table-head);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .modern-table th {
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-main);
+    text-transform: uppercase;
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.05em;
+  }
+
+  .modern-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    vertical-align: middle;
+    color: var(--text-main);
+  }
+
+  .btn {
+    padding: 0.45rem 0.75rem;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all var(--transition-normal);
+    font-size: var(--font-size-sm);
+    line-height: 1.1;
+  }
+
+  .btn-primary {
+    background: #3B82F6;
+    color: #ffffff;
+  }
+
+  .btn-warning {
+    background: var(--warning);
+    color: #ffffff;
+  }
+
+  .btn-danger {
+    background: var(--danger);
+    color: #ffffff;
+  }
+
+  .alert {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+    background-color: var(--success-light);
+    color: var(--success);
+    border: 1px solid rgba(22, 163, 74, 0.35);
+  }
+
   .degrees-header {
     display: flex;
     justify-content: space-between;
@@ -156,6 +268,7 @@
   }
 </style>
 
+<div class="degrees-page">
 <div class="degrees-header">
   <div>
     <h1 class="degrees-title">Degree Programs</h1>
@@ -225,9 +338,6 @@
   </table>
 </div>
 
-@endsection
+</div>
 
-@section('footer')
-@parent
-<p>Copyright 2024. All rights reserved.</p>
 @endsection
