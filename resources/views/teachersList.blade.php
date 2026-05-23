@@ -1,0 +1,483 @@
+@extends('format.layout')
+
+@section('title','Teachers Management')
+
+@section('content')
+
+<style>
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-md);
+  }
+
+  .page-header h1 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+  }
+
+  .page-header > div:first-child {
+    flex: 1;
+    color: white;
+  }
+  
+  .page-header .text-secondary {
+    font-size: var(--font-size-base);
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.5rem;
+    font-weight: 500;
+  }
+
+  .page-header .btn-primary {
+    background-color: white;
+    color: #3B82F6;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all var(--transition-normal);
+    border: none;
+    cursor: pointer;
+  }
+
+  .page-header .btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .search-box {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+    padding-left: 2.5rem;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border-light);
+    transition: all var(--transition-normal);
+    font-size: var(--font-size-base);
+    background-color: var(--bg-surface);
+  }
+  
+  .search-box input:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+
+  .table-wrapper {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+  }
+
+  .modern-table thead {
+    background-color: var(--table-head);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .modern-table th {
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-main);
+    text-transform: uppercase;
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.03em;
+  }
+
+  .modern-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color var(--transition-fast);
+  }
+
+  .modern-table tbody tr:hover {
+    background-color: var(--table-hover);
+  }
+
+  .modern-table td {
+    padding: var(--spacing-md) var(--spacing-lg);
+    vertical-align: middle;
+    color: var(--text-main);
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+    color: white;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .name-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .name-info p {
+    margin: 0;
+  }
+
+  .name-info .full-name {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: var(--font-size-base);
+  }
+
+  .name-info .middle-name {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+  }
+
+  .action-cell {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: var(--font-size-sm);
+  }
+
+  .btn-primary {
+    background-color: #3B82F6;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #2563EB;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-warning {
+    background-color: var(--warning);
+    color: white;
+  }
+
+  .btn-warning:hover {
+    background-color: #d4a83f;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-danger {
+    background-color: var(--danger);
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #c56868;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-secondary {
+    background-color: var(--text-secondary);
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--text-main);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-light);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .pagination-info {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .alert {
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+
+  .alert-success {
+    background-color: var(--success-light);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+
+  .alert-danger {
+    background-color: var(--danger-light);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+
+  .form-control {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-family: var(--font-sans);
+    transition: all var(--transition-normal);
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: #F97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      flex-direction: column;
+    }
+    
+    .page-header h1 {
+      font-size: var(--font-size-2xl);
+    }
+
+    .page-header .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .action-cell {
+      flex-direction: column;
+    }
+
+    .action-cell .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="page-header">
+  <div>
+    Welcome, {{ $logged_role }}!<br>
+    <h1>Teacher Management</h1>
+    <p class="text-secondary">{{ $teachers->total() }} total teachers</p>
+  </div>
+  <a href="/teachers/create" class="btn btn-primary">➕ Add Teacher</a>
+</div>
+
+@if(session('success') || session('messages'))
+  <div class="alert alert-success" id="success-alert">
+    <i class="bi bi-check-circle"></i>
+    <div class="alert-content">
+      {{ session('success') ?? session('messages') }}
+    </div>
+  </div>
+@endif
+
+<div class="search-box">
+  <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+    <path d="M10 10l3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+  </svg>
+  <input type="text" placeholder="Search by name or email…" id="search-input" class="form-control" />
+</div>
+
+<div class="table-wrapper">
+  <table class="modern-table">
+    <thead>
+      <tr>
+        <th width="50">#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Department</th>
+        <th>Role</th>
+        <th width="200">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      @forelse($teachers as $teacher)
+        <tr>
+          <td>{{ $teachers->firstItem() + $loop->index }}</td>
+          <td>
+            <div class="name-cell">
+              <div class="avatar">{{ strtoupper(substr($teacher->fname, 0, 1)) }}</div>
+              <div class="name-info">
+                <p class="full-name">{{ trim($teacher->fname . ' ' . ($teacher->mname ?? '') . ' ' . $teacher->lname) }}</p>
+                <p class="middle-name">ID: {{ $teacher->id }}</p>
+              </div>
+            </div>
+          </td>
+          <td>{{ $teacher->email }}</td>
+          <td>{{ $teacher->phone ?: 'N/A' }}</td>
+          <td>{{ $teacher->department ?: 'N/A' }}</td>
+          <td><span class="badge">👨‍🏫 Teacher</span></td>
+          <td>
+            <div class="action-cell">
+              <a href="/teachers/{{ $teacher->id }}" class="btn btn-primary">
+                <i class="bi bi-eye"></i> View
+              </a>
+              <a href="/teachers/{{ $teacher->id }}/edit" class="btn btn-warning">
+                <i class="bi bi-pencil"></i> Edit
+              </a>
+              <button onclick="deleteTeacher({{ $teacher->id }})" class="btn btn-danger">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      @empty
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+            No teachers found.
+          </td>
+        </tr>
+      @endforelse
+    </tbody>
+  </table>
+</div>
+
+@if($teachers->hasPages())
+  <div class="pagination-wrapper">
+    <span class="pagination-info">
+      Showing {{ $teachers->firstItem() }}–{{ $teachers->lastItem() }} of {{ $teachers->total() }} teachers
+    </span>
+    <div>
+      {{ $teachers->links() }}
+    </div>
+  </div>
+@endif
+
+<script>
+// Variable to store the current data hash for comparison
+let teacherDataHash = null;
+
+// Function to reload teacher list (called only after update/add/delete)
+function reloadTeacherList() {
+    $.ajax({
+        url: '/teachers/list-data',
+        type: 'GET',
+        success: function(response) {
+            $('#table-body').html(response);
+            teacherDataHash = hashCode(response);
+        },
+        error: function(xhr, status, error) {
+            console.log('Error fetching teacher data:', error);
+        }
+    });
+}
+
+// Simple hash function to detect data changes
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash.toString();
+}
+
+// Auto-reload when data changes (from other browser/user actions)
+setInterval(function() {
+    $.ajax({
+        url: '/teachers/list-data',
+        type: 'GET',
+        success: function(response) {
+            const newHash = hashCode(response);
+            if (teacherDataHash === null || teacherDataHash !== newHash) {
+                $('#table-body').html(response);
+                teacherDataHash = newHash;
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('Error checking for teacher updates:', error);
+        }
+    });
+}, 3000);
+</script>
+
+@endsection
+
+@section('footer')
+@parent
+<p>Copyright 2024. All rights reserved.</p>
+@endsection

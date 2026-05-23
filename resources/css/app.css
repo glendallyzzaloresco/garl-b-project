@@ -1,0 +1,116 @@
+/* App-specific styles and overrides for global theme */
+
+/* Import global design system */
+@import './global-theme.css';
+
+/* Tailwind directives (if needed) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom component extensions */
+/* Add page-specific styles here as needed */
+
+/* Form-specific customizations */
+.form-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Detail grid for student/degree details page */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.detail-item {
+  background-color: var(--bg-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+}
+
+.detail-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.detail-value {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+/* Modal / Dialog styles */
+.modal-backdrop {
+  background-color: rgba(34, 34, 34, 0.5);
+}
+
+.modal-content {
+  border-color: var(--border-light);
+  border-radius: var(--radius-lg);
+}
+
+.modal-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-body {
+  background-color: var(--bg-surface);
+}
+
+/* Activity Log specific */
+.activity-log-table {
+  font-size: var(--font-size-sm);
+}
+
+.activity-log-table .log-time {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.activity-log-table .log-message {
+  color: var(--text-main);
+}
+
+.log-level {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.log-level-info {
+  background-color: var(--info-light);
+  color: var(--info);
+}
+
+.log-level-warning {
+  background-color: var(--warning-light);
+  color: var(--warning);
+}
+
+.log-level-error {
+  background-color: var(--danger-light);
+  color: var(--danger);
+}
+
+.log-level-success {
+  background-color: var(--success-light);
+  color: var(--success);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
