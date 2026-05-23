@@ -599,7 +599,7 @@
                 </div>
               </td>
               <td>{{ $student->mname ?: 'N/A' }}</td>
-              <td>{{ $student->userAccount->email ?? 'N/A' }}</td>
+              <td>{{ $student->userAccount?->email ?? $student->email ?? 'N/A' }}</td>
               <td>{{ $student->contactInfo ?: 'N/A' }}</td>
               <td>{{ $student->degree ? $student->degree->degree_title : 'Not Assigned' }}</td>
               <td>

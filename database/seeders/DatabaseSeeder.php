@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Student;
 use App\Models\Degree;
+use App\Models\UserAccount;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,6 +28,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserAccountSeeder::class);
 
+        $studentAccountId = UserAccount::where('email', 'student1@example.com')->value('id');
+
         $defaultDegreeId = $degrees->first()?->id;
 
         for ($i = 1; $i <= 3; $i++) {
@@ -38,6 +41,7 @@ class DatabaseSeeder extends Seeder
                     'lname' => (string) $i,
                     'contactInfo' => '000-000-0000',
                     'degree_id' => $defaultDegreeId,
+                    'user_account_id' => $i === 1 ? $studentAccountId : null,
                 ]
             );
         }
