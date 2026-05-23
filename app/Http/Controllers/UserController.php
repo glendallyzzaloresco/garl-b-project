@@ -174,6 +174,10 @@ class UserController extends Controller
         }
 
         $user = UserAccount::find(Session::get('user_id'));
+        if (!$user) {
+            Session::forget(['user_id', 'logged_user', 'logged_role', 'student_id']);
+            return redirect('/')->withErrors(['username' => 'Session expired. Please log in again.']);
+        }
         $isFirstTimeLogin = !$user->password_changed;
 
         if ($isFirstTimeLogin) {
@@ -215,19 +219,44 @@ class UserController extends Controller
             'password_changed' => true
         ]);
 
-        // Get the student record
-        $student = Student::where('user_account_id', $user->id)->first();
-        
-        if ($student) {
-            // Clear the session to refresh user data
-            Session::forget('password_changed');
+        // Refresh session state
+        Session::forget('password_changed');
+
+        $message = $isFirstTimeLogin
+            ? 'Welcome! Your password has been set successfully.'
+            : 'Password updated successfully!';
+
+        $role = Session::get('logged_role') ?? $user->role;
+
+        if ($role === 'student') {
+            $studentId = Session::get('student_id');
+            if (!$studentId) {
+                $student = Student::where('user_account_id', $user->id)->first();
+                if ($student) {
+                    $studentId = $student->id;
+                    Session::put('student_id', $studentId);
+                }
+            }
+
             Session::save();
-            
-            $message = $isFirstTimeLogin ? 'Welcome! Your password has been set successfully.' : 'Password updated successfully!';
-            return redirect()->route('student.dashboard', $student->id)->with('success', $message);
+
+            if ($studentId) {
+                return redirect()->route('student.dashboard', $studentId)->with('success', $message);
+            }
+
+            // If the account is marked as student but has no linked student record
+            return redirect('/')->withErrors([
+                'username' => 'Student profile is not linked to this account. Please contact the administrator.'
+            ]);
         }
 
-        return redirect('/dashboard')->with('success', 'Password updated successfully!');
+        if ($role === 'teacher') {
+            Session::save();
+            return redirect()->route('teacher.dashboard')->with('success', $message);
+        }
+
+        Session::save();
+        return redirect()->route('dashboard')->with('success', $message);
     }
 
     /**
