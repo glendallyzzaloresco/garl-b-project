@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         $defaultDegreeId = $degrees->first()?->id;
 
         for ($i = 1; $i <= 3; $i++) {
-            Student::firstOrCreate(
+            $student = Student::firstOrCreate(
                 ['email' => "student{$i}@example.com"],
                 [
                     'fname' => 'Student',
@@ -44,6 +44,11 @@ class DatabaseSeeder extends Seeder
                     'user_account_id' => $i === 1 ? $studentAccountId : null,
                 ]
             );
+
+            // Repair link if the student already existed from a prior seed.
+            if ($i === 1 && $studentAccountId && !$student->user_account_id) {
+                $student->update(['user_account_id' => $studentAccountId]);
+            }
         }
     }
 }

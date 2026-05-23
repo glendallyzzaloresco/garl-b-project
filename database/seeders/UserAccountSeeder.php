@@ -41,10 +41,21 @@ class UserAccountSeeder extends Seeder
         ];
 
         foreach ($accounts as $account) {
-            UserAccount::updateOrCreate(
-                ['email' => $account['email']],
-                $account
-            );
+            $user = UserAccount::firstOrNew(['email' => $account['email']]);
+
+            // Always keep these fields aligned
+            $user->username = $account['username'];
+            $user->role = $account['role'];
+            $user->is_active = $account['is_active'];
+
+            // Only set the default password when first creating the account.
+            // This avoids wiping user-updated passwords on every container boot.
+            if (!$user->exists) {
+                $user->password = $account['password'];
+                $user->password_changed = $account['password_changed'];
+            }
+
+            $user->save();
         }
     }
 }
