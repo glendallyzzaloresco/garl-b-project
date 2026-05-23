@@ -367,7 +367,7 @@
       </div>
     @endif
 
-    <form action="{{ route('user.update-password') }}" method="POST">
+    <form action="/update-password" method="POST">
       @csrf
       
       <div class="profile-row full">

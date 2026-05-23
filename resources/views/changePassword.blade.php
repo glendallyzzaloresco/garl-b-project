@@ -148,7 +148,7 @@
   }
 </style>
 
-<div class="password-change-container">
+<div class="password-change-container" data-first-login="{{ session('first_login') ? '1' : '0' }}">
   <div class="password-change-card">
     <div class="password-change-icon">
       <i class="bi bi-lock"></i>
@@ -172,7 +172,7 @@
       </div>
     @endif
 
-    <form action="{{ route('user.update-password') }}" method="POST">
+    <form action="/update-password" method="POST">
       @csrf
 
       <div class="form-group" id="current_password_group">
@@ -228,7 +228,8 @@
 
 <script>
   // Check if this is a first-time login
-  const isFirstLogin = {{ session('first_login', 'false') === true ? 'true' : 'false' }};
+  const container = document.querySelector('.password-change-container');
+  const isFirstLogin = container?.getAttribute('data-first-login') === '1';
   const currentPasswordField = document.getElementById('current_password');
   const currentPasswordGroup = document.getElementById('current_password_group');
   
