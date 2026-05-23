@@ -1,3 +1,15 @@
+FROM node:20-alpine AS assets
+
+WORKDIR /app
+
+COPY package.json package-lock.json vite.config.js ./
+COPY resources ./resources
+COPY public ./public
+
+RUN npm ci
+RUN npm run build
+
+
 FROM php:8.4-fpm
 
 RUN set -eux; \
@@ -25,6 +37,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 COPY . .
+
+COPY --from=assets /app/public/build /var/www/public/build
 
 RUN php -r "if (!extension_loaded('gd')) { fwrite(STDERR, 'ext-gd is not enabled\n'); exit(1); } echo 'ext-gd enabled\n';"
 
