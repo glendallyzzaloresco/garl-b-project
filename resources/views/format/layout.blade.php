@@ -14,6 +14,113 @@
     <script src="/js/jQuery.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        body {
+            margin: 0;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F8FAFC;
+            color: #1f2937;
+        }
+
+        .shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1E3A8A;
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+
+        .topbar-nav {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .topbar-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            padding: 0.45rem 0.7rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+        }
+
+        .topbar-nav a:hover {
+            background: rgba(59, 130, 246, 0.10);
+            color: #1E3A8A;
+            transform: translateY(-1px);
+        }
+
+        .topbar-nav a:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+        }
+
+        .logout-btn {
+            background: #F97316;
+            color: #ffffff !important;
+        }
+
+        .logout-btn:hover {
+            background: #ea580c;
+            color: #ffffff !important;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 1rem 2rem;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .topbar {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .brand {
+                white-space: normal;
+            }
+
+            .topbar-nav {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
         .content {
             position: relative;
         }
