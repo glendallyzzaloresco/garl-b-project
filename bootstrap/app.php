@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         //global middleware
         // $middleware->append(\App\Http\Middleware\PromotionMW::class);
 
+        // Render (and other hosts) run behind a reverse proxy; trust forwarded headers
+        // and force HTTPS in production so forms are always submitted securely.
+        $middleware->append(\App\Http\Middleware\TrustProxies::class);
+        $middleware->append(\App\Http\Middleware\ForceHttps::class);
+
 
         $middleware->group('group_middleware', [
             //middleware group
