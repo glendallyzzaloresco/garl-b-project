@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Degree;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,19 +19,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create degrees first
-        Degree::create(['degree_title' => 'Bachelor of Science']);
-        Degree::create(['degree_title' => 'Bachelor of Arts']);
-        Degree::create(['degree_title' => 'Master of Science']);
+        // NOTE: This seeder runs in production on Render. Keep it deterministic,
+        // idempotent, and independent of Faker (composer install --no-dev).
 
-        // User::factory(10)->create();
+        $degrees = collect([
+            'Bachelor of Science',
+            'Bachelor of Arts',
+            'Master of Science',
+        ])->map(fn (string $title) => Degree::firstOrCreate(['degree_title' => $title]));
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ]
+        );
 
-        // Create 10 sample students
-        Student::factory(10)->create();
+        $defaultDegreeId = $degrees->first()?->id;
+
+        for ($i = 1; $i <= 3; $i++) {
+            Student::firstOrCreate(
+                ['email' => "student{$i}@example.com"],
+                [
+                    'fname' => 'Student',
+                    'mname' => 'A',
+                    'lname' => (string) $i,
+                    'contactInfo' => '000-000-0000',
+                    'degree_id' => $defaultDegreeId,
+                ]
+            );
+        }
     }
 }
