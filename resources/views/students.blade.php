@@ -5,6 +5,53 @@
 @section('content')
 
 <style>
+  :root {
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --font-size-sm: 0.85rem;
+    --font-size-base: 0.95rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+
+    --bg-surface: #ffffff;
+    --text-main: #1f2937;
+    --text-secondary: #6B7280;
+    --border-light: #E5E7EB;
+    --border: #D1D5DB;
+    --table-head: #f3f4f6;
+    --table-hover: #f9fafb;
+
+    --primary: #3B82F6;
+    --primary-hover: #2563EB;
+    --primary-light: rgba(59, 130, 246, 0.18);
+    --info: #2563EB;
+    --info-light: rgba(37, 99, 235, 0.12);
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --danger-light: rgba(239, 68, 68, 0.10);
+    --success: #16A34A;
+    --success-light: rgba(22, 163, 74, 0.10);
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.10);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+  }
+
+  .students-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
   .page-header {
     display: flex;
     justify-content: space-between;
@@ -334,11 +381,12 @@
   }
 </style>
 
+<div class="students-page">
 <div class="page-header">
   <div>
     Welcome, {{ $logged_role }}!<br>
     <h1>Student Management</h1>
-    <p class="text-secondary">{{ $students->count() }} total students</p>
+    <p class="text-secondary">{{ method_exists($students, 'total') ? $students->total() : $students->count() }} total students</p>
   </div>
  
 </div>
@@ -436,13 +484,21 @@ setInterval(function() {
         }
     });
 }, 3000);
+
+// Delegated handler so it works after AJAX refreshes
+document.addEventListener('click', function (event) {
+  const button = event.target.closest('.js-delete-student');
+  if (!button) return;
+  if (typeof deleteStudent !== 'function') return;
+
+  const studentId = button.getAttribute('data-student-id');
+  if (!studentId) return;
+  deleteStudent(studentId);
+});
 </script>
 
-@endsection
+</div>
 
-@section('footer')
-@parent
-<p>Copyright 2024. All rights reserved.</p>
 @endsection
 
 

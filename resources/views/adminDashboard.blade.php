@@ -455,22 +455,23 @@
   padding: 16px 24px;
   border-radius: 12px;
   box-shadow: 0 10px 32px rgba(16, 185, 129, 0.35);
-  display: flex;
+  display: none;
   align-items: center;
   gap: 12px;
   font-size: 15px;
   font-weight: 600;
   z-index: 9999;
-  animation: slideInRight 0.4s ease-out forwards;
-  opacity: 0;
+  pointer-events: none;
 }
 
 .notification-toast.success {
   background: linear-gradient(135deg, var(--green) 0%, #059669 100%);
+  animation: slideInRight 0.4s ease-out forwards;
 }
 
 .notification-toast.error {
   background: linear-gradient(135deg, var(--red) 0%, #991b1b 100%);
+  animation: slideInRight 0.4s ease-out forwards;
 }
 
 .notification-toast.success::before {

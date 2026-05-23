@@ -29,16 +29,13 @@ class StudentsController extends Controller
     public function index()
     {
 
-        $students = Student::all();
-        $logged_role = Session::get("logged_role");
-        return view('students', compact('students', 'logged_role'));
-        
         if (Session::get('logged_role') === 'teacher') {
             return redirect()->route('teacher.dashboard');
         }
-        
-        $students = Student::with('degree')->paginate(10);
+
+        $students = Student::with(['degree', 'userAccount'])->paginate(10);
         $logged_role = Session::get("logged_role");
+
         return view('students', compact('students', 'logged_role'));
     }
 

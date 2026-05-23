@@ -10,7 +10,7 @@
         </div>
       </div>
     </td>
-    <td>{{ $student->userAccount->email ?? 'N/A' }}</td>
+    <td>{{ $student->userAccount?->email ?? $student->email ?? 'N/A' }}</td>
     <td>{{ $student->contactInfo }}</td>
     <td>
       @if($student->degree)
@@ -27,7 +27,7 @@
         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning">
           <i class="bi bi-pencil"></i> Edit
         </a>
-        <button onclick="deleteStudent({{ $student->id }})" class="btn btn-danger">
+        <button type="button" class="btn btn-danger js-delete-student" data-student-id="{{ $student->id }}">
           <i class="bi bi-trash"></i> Delete
         </button>
       </div>
