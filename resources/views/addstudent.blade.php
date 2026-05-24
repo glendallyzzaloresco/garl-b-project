@@ -69,6 +69,46 @@
       width: 100%;
     }
   }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .checkbox-item input {
+    width: 18px;
+    height: 18px;
+  }
+
+  .checkbox-help {
+    margin-top: 0.35rem;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (max-width: 900px) {
+    .checkbox-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .checkbox-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <a href="/students" class="back-link">
@@ -135,6 +175,27 @@
         <span class="form-error error-degree_id" style="display:none;"></span>
       </div>
     </div>
+
+    {{-- Courses (optional) --}}
+    <div class="form-group">
+      <label>Enroll Courses</label>
+      <div class="checkbox-help">Select one or more courses to enroll this student in.</div>
+
+      @if(isset($courses) && $courses->count() > 0)
+        <div class="checkbox-grid">
+          @foreach($courses as $course)
+            <label class="checkbox-item">
+              <input type="checkbox" name="course_ids[]" value="{{ $course->id }}" {{ in_array($course->id, (array) old('course_ids', [])) ? 'checked' : '' }} />
+              <span>{{ $course->course_name }}</span>
+            </label>
+          @endforeach
+        </div>
+      @else
+        <div class="checkbox-help">No courses available yet. Add courses first in the Admin Courses page.</div>
+      @endif
+      <span class="form-error error-course_ids" style="display:none;"></span>
+    </div>
+
     <div class="form-group">
         <label for="username">Username</label>
         <input type="text" id="username" class="form-control" name="username" placeholder="Enter username" value="" autocomplete="off" required />

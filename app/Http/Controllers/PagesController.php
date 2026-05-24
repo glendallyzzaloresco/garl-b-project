@@ -52,9 +52,9 @@ class PagesController extends Controller
         // Get the student from session or parameter
         if (!$studentId) {
             $user_id = Session::get('user_id');
-            $student = Student::where('user_account_id', $user_id)->first();
+            $student = Student::where('user_account_id', $user_id)->with(['degree', 'courses'])->first();
         } else {
-            $student = Student::find($studentId);
+            $student = Student::with(['degree', 'courses'])->find($studentId);
         }
         
         if (!$student) {

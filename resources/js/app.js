@@ -431,6 +431,7 @@ $(document).ready(function() {
             let degree_id = $('#degree_id').val();
             let username = $('#username').val().trim();
             let password = $('#password').val();
+            let course_ids = $('input[name="course_ids[]"]:checked').map(function() { return $(this).val(); }).get();
             
             // Validate required fields
             if (!fname || !lname || !email || !contactInfo || !degree_id || !username || !password) {
@@ -454,7 +455,7 @@ $(document).ready(function() {
             const originalText = $btn.html();
             $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> Adding...');
            
-            console.log('Sending student data:', {fname, mname, lname, email, contactInfo, degree_id, username, password});
+            console.log('Sending student data:', {fname, mname, lname, email, contactInfo, degree_id, username, password, course_ids});
 
             $.ajax({
                 url: '/students',
@@ -467,7 +468,8 @@ $(document).ready(function() {
                     contactInfo: contactInfo,
                     degree_id: degree_id,
                     username: username,
-                    password: password
+                  password: password,
+                  course_ids: course_ids
                 },
                 success: function(response) {
                     console.log('Student added successfully:', response);
@@ -482,6 +484,7 @@ $(document).ready(function() {
            
                     $('#fname, #mname, #lname, #email, #contactInfo, #username, #password').val('');
                     $('#degree_id').val('');
+                    $('input[name="course_ids[]"]').prop('checked', false);
                    
                     $('#success-message').fadeIn();
                     

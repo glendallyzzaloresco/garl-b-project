@@ -504,6 +504,19 @@
       </div>
     </div>
 
+    <div class="profile-row">
+      <div class="profile-field" style="grid-column: 1 / -1;">
+        <label class="profile-field-label">Enrolled Courses</label>
+        <div class="profile-field-value">
+          @if($student->courses && $student->courses->count() > 0)
+            {{ $student->courses->pluck('course_name')->join(', ') }}
+          @else
+            None
+          @endif
+        </div>
+      </div>
+    </div>
+
     <div class="btn-group">
       <a href="/change-password" class="btn btn-primary">🔐 Change Password</a>
       <a href="/logout" class="btn btn-secondary">🚪 Logout</a>

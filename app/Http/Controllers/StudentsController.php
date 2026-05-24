@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Models\Course;
 
 class StudentsController extends Controller
 {
@@ -45,7 +46,8 @@ class StudentsController extends Controller
     public function create()
     {
         $degrees = Degree::all();
-        return view('addstudent')->with('degrees', $degrees);
+        $courses = Course::query()->orderBy('course_name')->get();
+        return view('addstudent')->with('degrees', $degrees)->with('courses', $courses);
     }
 
     /**
@@ -62,6 +64,8 @@ class StudentsController extends Controller
             'degree_id' => 'required|exists:degrees,id',
             'username' => 'required|string|min:3|unique:user_accounts,username',
             'password' => 'required|string|min:6',
+            'course_ids' => 'nullable|array',
+            'course_ids.*' => 'integer|exists:courses,id',
         ]);
 
         if ($validator->fails()) {
@@ -86,7 +90,7 @@ class StudentsController extends Controller
                     'password_changed' => false,
                 ]);
 
-                Student::create([
+                $student = Student::create([
                     'user_account_id' => $user->id,
                     'fname' => $request->fname,
                     'mname' => $request->input('mname') ?? '',
@@ -95,6 +99,11 @@ class StudentsController extends Controller
                     'contactInfo' => $request->contactInfo,
                     'degree_id' => $request->input('degree_id'),
                 ]);
+
+                $courseIds = $request->input('course_ids', []);
+                if (is_array($courseIds) && count($courseIds) > 0) {
+                    $student->courses()->sync($courseIds);
+                }
 
                 return true;
             });
