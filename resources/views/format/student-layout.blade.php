@@ -94,6 +94,7 @@
             <h1 class="student-brand">Student Dashboard</h1>
             <ul class="student-nav">
                 <li><a href="{{ route('student.dashboard', ['student' => $student->id]) }}"><i class="bi bi-house"></i> Dashboard</a></li>
+                <li><a href="{{ route('student.courses.index', ['student' => $student->id]) }}"><i class="bi bi-journal-bookmark"></i> Courses</a></li>
                 <li><a href="{{ route('user.logout') }}" class="student-logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ul>
         </header>
@@ -105,6 +106,7 @@
 
     <!-- Notification Toast -->
     <div id="notificationToast" class="notification-toast"></div>
+    <div id="flashMessages" data-success="{{ session('success') }}" data-error="{{ session('error') }}" style="display:none;"></div>
 
     <style>
         .notification-toast {
@@ -197,6 +199,22 @@
                 }, 400);
             }, 4000);
         }
+
+        // Check for Laravel session messages
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashEl = document.getElementById('flashMessages');
+            if (!flashEl) return;
+
+            const successMessage = flashEl.dataset.success;
+            if (successMessage) {
+                showNotification('success', successMessage);
+            }
+
+            const errorMessage = flashEl.dataset.error;
+            if (errorMessage) {
+                showNotification('error', errorMessage);
+            }
+        });
         
 
     </script>

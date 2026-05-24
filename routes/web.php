@@ -10,6 +10,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\StudentCoursesController;
 use App\Http\Middleware\DownForMaintenanceMw;
 use App\Exports\StudentsExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -51,6 +52,11 @@ Route::middleware('group_middleware', 'maintenance', 'sessionUserAccount', 'forc
     Route::post('/teacher/avatar', [PagesController::class, 'uploadTeacherAvatar'])->name('teacher.avatar.upload');
     Route::get('/student/{student}', [PagesController::class, 'studentDashboard'])->name('student.dashboard');
     Route::post('/student/{student}/avatar', [PagesController::class, 'uploadStudentAvatar'])->name('student.avatar.upload');
+
+    // Student courses (enroll in many courses)
+    Route::get('/student/{student}/courses', [StudentCoursesController::class, 'index'])->name('student.courses.index');
+    Route::post('/student/{student}/courses/{course}/enroll', [StudentCoursesController::class, 'enroll'])->name('student.courses.enroll');
+    Route::delete('/student/{student}/courses/{course}/unenroll', [StudentCoursesController::class, 'unenroll'])->name('student.courses.unenroll');
     Route::get('/user_profile', [PagesController::class, 'userProfile']);
     Route::get('/user_posts', [PagesController::class, 'userPosts']);
     Route::post('/student_courses', [PagesController::class, 'studentCourses']);
