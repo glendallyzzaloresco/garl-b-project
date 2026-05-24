@@ -304,6 +304,28 @@
   border: 1px solid var(--border);
 }
 
+.course-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.course-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.10);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.course-empty {
+  color: var(--text-2);
+}
+
 /* Button Styles */
 .btn-group {
   display: flex;
@@ -509,9 +531,13 @@
         <label class="profile-field-label">Enrolled Courses</label>
         <div class="profile-field-value">
           @if($student->courses && $student->courses->count() > 0)
-            {{ $student->courses->pluck('course_name')->join(', ') }}
+            <div class="course-chips">
+              @foreach($student->courses as $course)
+                <span class="course-chip">{{ $course->course_name }}</span>
+              @endforeach
+            </div>
           @else
-            None
+            <span class="course-empty">None</span>
           @endif
         </div>
       </div>

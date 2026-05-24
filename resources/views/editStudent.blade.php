@@ -169,6 +169,34 @@
   margin-bottom: 0.25rem;
 }
 
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.checkbox-item input {
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox-help {
+  margin-top: 0.35rem;
+  color: var(--text-2);
+  font-size: 12px;
+}
+
 @keyframes slideDown { to { opacity:1; transform:translateY(0); } }
 @keyframes slideUp   { to { opacity:1; transform:translateY(0); } }
 
@@ -176,6 +204,7 @@
   .form-row { grid-template-columns: 1fr 1fr; }
   .form-header h1 { font-size: 1.25rem; }
   .form-container { padding: 1.25rem; }
+  .checkbox-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 380px) { .form-row { grid-template-columns: 1fr; } }
 </style>
@@ -248,6 +277,33 @@
             </select>
             <span class="form-error error-degree_id" style="display:none;"></span>
           </div>
+        </div>
+
+        {{-- Courses (optional) --}}
+        <div class="form-group">
+          <label>Enroll Courses</label>
+          <div class="checkbox-help">Select one or more courses for this student. Uncheck all to remove enrollments.</div>
+
+          {{-- ensures server can detect intentional update even when none checked --}}
+          <input type="hidden" id="course_ids_present" name="course_ids_present" value="1" />
+
+          @if(isset($courses) && $courses->count() > 0)
+            <div class="checkbox-grid">
+              @foreach($courses as $course)
+                @php
+                  $isEnrolled = in_array($course->id, $enrolledCourseIds ?? [], true);
+                  $isChecked = in_array($course->id, (array) old('course_ids', []), true) ? true : $isEnrolled;
+                @endphp
+                <label class="checkbox-item">
+                  <input type="checkbox" name="course_ids[]" value="{{ $course->id }}" {{ $isChecked ? 'checked' : '' }} />
+                  <span>{{ $course->course_name }}</span>
+                </label>
+              @endforeach
+            </div>
+          @else
+            <div class="checkbox-help">No courses available yet. Add courses first in the Admin Courses page.</div>
+          @endif
+          <span class="form-error error-course_ids" style="display:none;"></span>
         </div>
 
         {{-- Action Buttons --}}

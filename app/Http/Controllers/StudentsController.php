@@ -153,8 +153,14 @@ class StudentsController extends Controller
     public function edit(Student $student)
     {
         $degrees = Degree::all();
+        $courses = Course::query()->orderBy('course_name')->get();
+        $enrolledCourseIds = $student->courses()->pluck('id')->all();
         Log::info('Student edit form opened.');
-        return view ('editStudent')->with('student', $student)->with('degrees', $degrees);
+        return view('editStudent')
+            ->with('student', $student)
+            ->with('degrees', $degrees)
+            ->with('courses', $courses)
+            ->with('enrolledCourseIds', $enrolledCourseIds);
         
     }
 
@@ -170,6 +176,9 @@ class StudentsController extends Controller
             ],
             'contac_no' => 'required|numeric',
             'degree_id' => 'required|exists:degrees,id',
+            'course_ids_present' => 'nullable|boolean',
+            'course_ids' => 'nullable|array',
+            'course_ids.*' => 'integer|exists:courses,id',
         ]);
 
         if ($validator->fails()) {
@@ -190,6 +199,11 @@ class StudentsController extends Controller
         $student->contactInfo = $request->contac_no;
         $student->degree_id = $request->degree_id;
         $student->save();
+
+        if ($request->boolean('course_ids_present')) {
+            $courseIds = $request->input('course_ids');
+            $student->courses()->sync(is_array($courseIds) ? $courseIds : []);
+        }
 
         
         if ($student->userAccount) {

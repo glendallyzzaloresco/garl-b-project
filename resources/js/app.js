@@ -653,6 +653,7 @@ $(document).ready(function() {
             let e_mail = $('#e_mail').val().trim();
             let contac_no = $('#contac_no').val().trim();
             let degree_id = $('#degree_id').val();
+            let course_ids = $('input[name="course_ids[]"]:checked').map(function() { return $(this).val(); }).get();
 
             if (!f_name || !l_name || !e_mail || !contac_no || !degree_id) {
               showToast('Please fill in all required fields', 'error');
@@ -684,6 +685,8 @@ $(document).ready(function() {
                 e_mail: e_mail,
                 contac_no: contac_no,
                 degree_id: degree_id,
+                course_ids_present: 1,
+                course_ids: course_ids,
               },
               success: function(response) {
                 showToast(response.message || 'Student updated successfully.', 'success');
