@@ -8,13 +8,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --navy: #1E3A8A;
-  --blue: #3B82F6;
-  --orange: #F97316;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
+  /* Map local accents to global theme tokens */
+  --navy: var(--header-bg);
+  --blue: var(--primary);
+  --orange: var(--warning);
+
+  /* Local aliases used by this page */
+  --card: var(--bg-surface);
+  --border: var(--border-light);
+  --text: var(--text-main);
+  --text-2: var(--text-secondary);
+  --red: var(--danger);
+}
+
+.page-wrapper {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-xl);
+}
+
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: white;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: -40% -20% auto auto;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 60%);
+  border-radius: 9999px;
+  pointer-events: none;
 }
 
 .hero-content {

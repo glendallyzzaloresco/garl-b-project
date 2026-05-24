@@ -388,6 +388,12 @@
     <h1>Student Management</h1>
     <p class="text-secondary">{{ method_exists($students, 'total') ? $students->total() : $students->count() }} total students</p>
   </div>
+
+  <div>
+    <a href="{{ route('students.create') }}" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Add Student
+    </a>
+  </div>
  
 </div>
 
