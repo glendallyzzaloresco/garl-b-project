@@ -394,11 +394,27 @@ function showToast(message, type = 'success') {
 // Initialize jQuery handlers
 $(document).ready(function() {
     console.log('jQuery ready - initializing form handlers');
-    
+
+    const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    if (!csrfToken) {
+      console.warn('CSRF token meta tag missing or empty.');
+    }
+
     $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      headers: {
+        'X-CSRF-TOKEN': csrfToken
+      }
+    });
+
+    // If the session/token expired (common on hosted environments), refresh to recover.
+    $(document).ajaxError(function(_event, xhr) {
+      if (xhr && xhr.status === 419) {
+        try {
+          showToast('Session expired. Refreshing…', 'error');
+        } catch (_) {
         }
+        window.location.reload();
+      }
     });
 
     // Save Student Handler
