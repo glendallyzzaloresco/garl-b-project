@@ -503,7 +503,6 @@
                         @if(session('student_id'))
                             <li><a href="{{ route('student.dashboard', ['student' => session('student_id')]) }}">Dashboard</a></li>
                         @endif
-                        <li><a href="{{ route('students.index') }}">Students</a></li>
                     {{-- Teacher Role Navigation --}}
                     @elseif(session('logged_role') === 'teacher')
                         <li><a href="{{ route('teacher.dashboard') }}">Dashboard</a></li>

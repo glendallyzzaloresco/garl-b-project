@@ -66,14 +66,14 @@ Route::middleware('group_middleware', 'maintenance', 'sessionUserAccount', 'forc
     Route::post('/teachers', [PagesController::class, 'storeTeacher'])->name('teachers.store');
     
     // Student list data for AJAX refresh (must be before resource route)
-    Route::get('/students/list-data', [StudentsController::class, 'listData']);
+    Route::get('/students/list-data', [StudentsController::class, 'listData'])->middleware('checkAdminRole');
     
     // Teacher list data for AJAX refresh (must be before resource route)
     Route::get('/teachers/list-data', [TeachersController::class, 'listData']);
     
     // Resource routes
     Route::resource('/degrees', DegreeController::class);
-    Route::resource('/students', StudentsController::class)->Middleware('sessionUserAccount');
+    Route::resource('/students', StudentsController::class)->middleware('checkAdminRole');
     Route::resource('/teachers', TeachersController::class)->except(['create', 'store']);
 });
 

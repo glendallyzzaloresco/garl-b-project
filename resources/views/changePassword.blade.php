@@ -5,170 +5,129 @@
 @section('content')
 
 <style>
-  .password-change-container {
-    min-height: 100vh;
+  .pw-shell {
+    min-height: 80vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 2rem;
+    padding: var(--spacing-xl) var(--spacing-md);
+    background:
+      radial-gradient(900px circle at 15% 10%, var(--primary-light) 0%, transparent 55%),
+      radial-gradient(900px circle at 85% 95%, var(--danger-light) 0%, transparent 50%),
+      var(--bg-main);
   }
 
-  .password-change-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    max-width: 500px;
+  .pw-card {
     width: 100%;
-    padding: 3rem;
-    animation: slideUp 0.5s ease-out;
+    max-width: 520px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
   }
 
-  .password-change-icon {
+  .pw-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xl);
   }
 
-  .password-change-icon i {
-    font-size: 3rem;
-    color: #667eea;
+  .pw-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--spacing-md);
+    border-radius: var(--radius-full);
+    display: grid;
+    place-items: center;
+    background: var(--primary-light);
+    border: 1px solid var(--border-light);
+    color: var(--primary);
+    font-size: 26px;
   }
 
-  .password-change-card h2 {
-    text-align: center;
-    margin: 0 0 0.5rem 0;
-    font-size: 1.8rem;
-    color: #1a202c;
-    font-weight: 700;
+  .pw-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--font-size-2xl);
+    letter-spacing: -0.02em;
   }
 
-  .password-change-card .subtitle {
-    text-align: center;
-    color: #718096;
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
+  .pw-subtitle {
+    margin: var(--spacing-sm) 0 0 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
   }
 
-  .form-group {
-    margin-bottom: 1.5rem;
+  .pw-actions {
+    margin-top: var(--spacing-xl);
   }
 
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #2d3748;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .form-group input {
+  .pw-actions .btn {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    font-family: inherit;
   }
 
-  .form-group input:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  .pw-card .is-invalid {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 3px var(--danger-light) !important;
   }
 
-
-
-  .btn-change-password {
-    width: 100%;
-    padding: 0.9rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  .pw-error {
+    margin-top: var(--spacing-sm);
+    color: var(--danger);
+    font-size: var(--font-size-sm);
   }
 
-  .btn-change-password:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  .pw-error-list {
+    margin-top: var(--spacing-sm);
+    padding-left: 18px;
   }
 
-  .alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-  }
-
-  .alert-danger {
-    background: #fed7d7;
-    border: 1px solid #fc8181;
-    color: #c53030;
-  }
-
-  .alert-success {
-    background: #c6f6d5;
-    border: 1px solid #9ae6b4;
-    color: #22543d;
-  }
-
-  .error-message {
-    color: #c53030;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .pw-error-list li {
+    margin: 4px 0;
   }
 
   @media (max-width: 640px) {
-    .password-change-card {
-      padding: 2rem;
-    }
-
-    .password-change-card h2 {
-      font-size: 1.5rem;
+    .pw-card {
+      padding: var(--spacing-lg);
     }
   }
 </style>
 
-<div class="password-change-container" data-first-login="{{ session('first_login') ? '1' : '0' }}">
-  <div class="password-change-card">
-    <div class="password-change-icon">
-      <i class="bi bi-lock"></i>
-    </div>
+<div class="pw-shell" data-first-login="{{ session('first_login') ? '1' : '0' }}">
+  <div class="pw-card">
+    <div class="pw-header">
+      <div class="pw-icon" aria-hidden="true">
+        <i class="bi bi-lock"></i>
+      </div>
 
-    <h2>Change Your Password</h2>
-    <p class="subtitle">This is your first login. Please set your password to continue.</p>
+      <h2 class="pw-title">Change Your Password</h2>
+      <p class="pw-subtitle">
+        @if(session('first_login'))
+          This is your first login. Please set your password to continue.
+        @else
+          Update your password to keep your account secure.
+        @endif
+      </p>
+    </div>
 
     @if($errors->any())
       <div class="alert alert-danger">
-        <strong>Please fix the following errors:</strong><br>
-        @foreach($errors->all() as $error)
-          • {{ $error }}<br>
-        @endforeach
+        <div class="alert-icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></div>
+        <div class="alert-content">
+          <div><strong>Please fix the following:</strong></div>
+          <ul class="pw-error-list">
+            @foreach($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
       </div>
     @endif
 
     @if(session('success'))
       <div class="alert alert-success">
-        {{ session('success') }}
+        <div class="alert-icon" aria-hidden="true"><i class="bi bi-check-circle"></i></div>
+        <div class="alert-content">{{ session('success') }}</div>
       </div>
     @endif
 
@@ -182,10 +141,11 @@
           id="current_password" 
           name="current_password" 
           placeholder="Enter your current password"
+          autocomplete="current-password"
           class="@error('current_password') is-invalid @enderror"
         />
         @error('current_password')
-          <div class="error-message">{{ $message }}</div>
+          <div class="pw-error">{{ $message }}</div>
         @enderror
       </div>
 
@@ -197,10 +157,11 @@
           name="new_password" 
           placeholder="Enter your new password"
           required
+          autocomplete="new-password"
           class="@error('new_password') is-invalid @enderror"
         />
         @error('new_password')
-          <div class="error-message">{{ $message }}</div>
+          <div class="pw-error">{{ $message }}</div>
         @enderror
       </div>
 
@@ -212,16 +173,19 @@
           name="new_password_confirmation" 
           placeholder="Confirm your new password"
           required
+          autocomplete="new-password"
           class="@error('new_password_confirmation') is-invalid @enderror"
         />
         @error('new_password_confirmation')
-          <div class="error-message">{{ $message }}</div>
+          <div class="pw-error">{{ $message }}</div>
         @enderror
       </div>
 
-      <button type="submit" class="btn-change-password">
-        <i class="bi bi-check-circle"></i> Update Password
-      </button>
+      <div class="pw-actions">
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i class="bi bi-check-circle"></i> Update Password
+        </button>
+      </div>
     </form>
   </div>
 </div>
