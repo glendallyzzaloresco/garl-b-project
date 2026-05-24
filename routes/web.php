@@ -10,6 +10,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentCoursesController;
 use App\Http\Middleware\DownForMaintenanceMw;
 use App\Exports\StudentsExport;
@@ -79,6 +80,7 @@ Route::middleware('group_middleware', 'maintenance', 'sessionUserAccount', 'forc
     
     // Resource routes
     Route::resource('/degrees', DegreeController::class);
+    Route::resource('/courses', CourseController::class)->except(['show'])->middleware('checkAdminRole');
     Route::resource('/students', StudentsController::class)->middleware('checkAdminRole');
     Route::resource('/teachers', TeachersController::class)->except(['create', 'store']);
 });
