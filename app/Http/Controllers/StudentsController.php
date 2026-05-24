@@ -91,6 +91,7 @@ class StudentsController extends Controller
                     'fname' => $request->fname,
                     'mname' => $request->input('mname') ?? '',
                     'lname' => $request->lname,
+                    'email' => $request->input('email'),
                     'contactInfo' => $request->contactInfo,
                     'degree_id' => $request->input('degree_id'),
                 ]);
@@ -176,6 +177,7 @@ class StudentsController extends Controller
         $student->fname = $request->f_name;
         $student->mname = $request->m_name;
         $student->lname = $request->l_name;
+        $student->email = $request->e_mail;
         $student->contactInfo = $request->contac_no;
         $student->degree_id = $request->degree_id;
         $student->save();
