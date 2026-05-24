@@ -16,22 +16,20 @@
     <td><span class="badge">👨‍🏫 Teacher</span></td>
     <td>
       <div class="action-cell">
-        <a href="/teachers/{{ $teacher->id }}" class="btn btn-primary">
-          <i class="bi bi-eye"></i> View
+        <a href="/teachers/{{ $teacher->id }}" class="btn btn-primary" title="View Teacher">
+          <i class="bi bi-eye"></i> <span class="btn-label">View</span>
         </a>
-        <a href="/teachers/{{ $teacher->id }}/edit" class="btn btn-warning">
-          <i class="bi bi-pencil"></i> Edit
+        <a href="/teachers/{{ $teacher->id }}/edit" class="btn btn-warning" title="Edit Teacher">
+          <i class="bi bi-pencil"></i> <span class="btn-label">Edit</span>
         </a>
-        <button type="button" class="btn btn-danger js-delete-teacher" data-teacher-id="{{ $teacher->id }}">
-          <i class="bi bi-trash"></i> Delete
+        <button type="button" class="btn btn-danger js-delete-teacher" data-teacher-id="{{ $teacher->id }}" title="Delete Teacher">
+          <i class="bi bi-trash"></i> <span class="btn-label">Delete</span>
         </button>
       </div>
     </td>
   </tr>
 @empty
   <tr>
-    <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-      No teachers found.
-    </td>
+      <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
   </tr>
 @endforelse

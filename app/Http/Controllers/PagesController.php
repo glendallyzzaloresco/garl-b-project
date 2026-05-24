@@ -181,7 +181,7 @@ class PagesController extends Controller
         $totalStudents = Student::count();
         $totalTeachers = Teacher::count();
         $students = Student::with('degree')->paginate(10);
-        $teachers = Teacher::with('userAccount')->paginate(10);
+        $teachers = Teacher::with('userAccount', 'degree')->paginate(10);
         return view('adminDashboard', compact('totalStudents', 'totalTeachers', 'students', 'teachers'));
     }
 
@@ -190,7 +190,8 @@ class PagesController extends Controller
      */
     public function createTeacher()
     {
-        return view('addTeacher');
+        $degrees = \App\Models\Degree::orderBy('degree_title')->get();
+        return view('addTeacher', compact('degrees'));
     }
 
     /**
@@ -206,6 +207,7 @@ class PagesController extends Controller
             'contact_no' => 'required|digits:11',
             'username' => 'required|string|min:3|unique:user_accounts,username',
             'password' => 'required|string|min:6',
+            'degree_id' => 'nullable|integer|exists:degrees,id',
         ]);
 
         try {
@@ -227,6 +229,7 @@ class PagesController extends Controller
                 'lname' => $request->input('lname'),
                 'email' => $request->input('email'),
                 'phone' => $request->input('contact_no'),
+                'degree_id' => !empty($request->input('degree_id')) ? intval($request->input('degree_id')) : null,
             ]);
 
             // Return JSON for AJAX requests

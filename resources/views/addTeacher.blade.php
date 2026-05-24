@@ -144,6 +144,30 @@
   color: var(--text-2);
 }
 
+.form-group select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  background: #fafbfc;
+  cursor: pointer;
+}
+
+.form-group select:hover {
+  border-color: var(--orange);
+  background: #FFFFFF;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
 .form-group textarea {
   width: 100%;
   padding: 0.85rem 1rem;
@@ -397,6 +421,18 @@
       </div>
 
       <div class="form-group form-row full">
+        <label for="degree_id">Department (Optional)</label>
+        <select id="degree_id" name="degree_id" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; transition: all 0.3s ease; font-family: inherit; background: #fafbfc; cursor: pointer;">
+          <option value="">-- Select a Department --</option>
+          @foreach ($degrees as $degree)
+            <option value="{{ $degree->id }}" {{ old('degree_id') == $degree->id ? 'selected' : '' }}>
+              {{ $degree->degree_title }}
+            </option>
+          @endforeach
+        </select>
+      </div>
+
+      <div class="form-group form-row full">
         <label for="username">Username <span class="required">*</span></label>
         <input type="text" id="username" name="username" placeholder="Choose a username" required minlength="3">
       </div>
@@ -440,6 +476,7 @@ $(document).ready(function() {
       lname: $('#lname').val(),
       email: $('#email').val(),
       contact_no: $('#contact_no').val(),
+      degree_id: $('#degree_id').val(),
       username: $('#username').val(),
       password: $('#password').val(),
       _token: csrfToken

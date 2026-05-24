@@ -13,7 +13,7 @@ class TeachersController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::with('userAccount')->paginate(10);
+        $teachers = Teacher::with('userAccount', 'degree')->paginate(10);
         $logged_role = \Illuminate\Support\Facades\Session::get("logged_role");
         return view('teachersList', compact('teachers', 'logged_role'));
     }
@@ -23,7 +23,7 @@ class TeachersController extends Controller
      */
     public function show($id)
     {
-        $teacher = Teacher::findOrFail($id);
+        $teacher = Teacher::with('degree')->findOrFail($id);
         $userAccount = UserAccount::findOrFail($teacher->user_account_id);
         
         // Merge the teacher details with user account data
@@ -43,7 +43,8 @@ class TeachersController extends Controller
     public function edit($id)
     {
         $teacher = Teacher::findOrFail($id);
-        return view('editTeacher')->with('teacher', $teacher);
+        $degrees = \App\Models\Degree::orderBy('degree_title')->get();
+        return view('editTeacher')->with(compact('teacher', 'degrees'));
     }
 
     /**
@@ -62,6 +63,7 @@ class TeachersController extends Controller
             'e_mail' => 'required|email|unique:teachers,email,' . $teacher->id,
             'phone' => 'nullable|string',
             'department' => 'nullable|string',
+            'degree_id' => 'nullable|integer|exists:degrees,id',
         ]);
         
         // Update teacher fields
@@ -71,6 +73,7 @@ class TeachersController extends Controller
         $teacher->email = $validated['e_mail'];
         $teacher->phone = $validated['phone'] ?? null;
         $teacher->department = $validated['department'] ?? null;
+        $teacher->degree_id = !empty($validated['degree_id']) ? $validated['degree_id'] : null;
         $teacher->save();
         
         // For AJAX requests, return JSON
@@ -121,7 +124,7 @@ class TeachersController extends Controller
      */
     public function listData()
     {
-        $teachers = Teacher::with('userAccount')->paginate(10);
+        $teachers = Teacher::with('userAccount', 'degree')->paginate(10);
         return view('teacherListComponent', compact('teachers'))->render();
     }
 }

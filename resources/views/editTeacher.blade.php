@@ -71,6 +71,10 @@
   margin-bottom: 1.5rem;
 }
 
+.form-row.two-col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -239,6 +243,22 @@
             <label for="department">Department</label>
             <input type="text" id="department" class="form-control" name="department" value="{{ old('department', $teacher->department) }}" />
             <span class="form-error error-department" style="display:none;"></span>
+          </div>
+        </div>
+
+        {{-- Row 3: Department --}}
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="degree_id">Department (Optional)</label>
+            <select id="degree_id" class="form-control" name="degree_id">
+              <option value="">-- Select a Department --</option>
+              @foreach ($degrees as $degree)
+                <option value="{{ $degree->id }}" {{ old('degree_id', $teacher->degree_id) == $degree->id ? 'selected' : '' }}>
+                  {{ $degree->degree_title }}
+                </option>
+              @endforeach
+            </select>
+            <span class="form-error error-degree_id" style="display:none;"></span>
           </div>
         </div>
 

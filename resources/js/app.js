@@ -728,6 +728,7 @@ $(document).ready(function() {
             let e_mail = $('#e_mail').val().trim();
             let phone = $('#phone').val().trim();
             let department = $('#department').val().trim();
+            let degree_id = $('#degree_id').val();
 
             if (!f_name || !l_name || !e_mail) {
               showToast('Please fill in all required fields', 'error');
@@ -754,6 +755,7 @@ $(document).ready(function() {
                 e_mail: e_mail,
                 phone: phone,
                 department: department,
+                degree_id: degree_id,
               },
               success: function(response) {
                 showToast(response.message || 'Teacher updated successfully.', 'success');

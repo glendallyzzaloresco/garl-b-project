@@ -17,6 +17,7 @@ class Teacher extends Model
         'phone',
         'department',
         'qualifications',
+        'degree_id',
     ];
 
     public $timestamps = true;
@@ -27,5 +28,13 @@ class Teacher extends Model
     public function userAccount()
     {
         return $this->belongsTo(UserAccount::class, 'user_account_id');
+    }
+
+    /**
+     * Get the degree associated with the teacher
+     */
+    public function degree()
+    {
+        return $this->belongsTo(Degree::class);
     }
 }

@@ -19,21 +19,32 @@ class CourseController extends Controller
         Log::warning($message);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::query()->orderBy('course_name')->get();
-        return view('courses', compact('courses'));
+        $query = Course::query()->with('degree');
+        
+        // Filter by degree if provided
+        if ($request->has('degree_id') && $request->degree_id != '') {
+            $query->where('degree_id', $request->degree_id);
+        }
+        
+        $courses = $query->orderBy('course_name')->get();
+        $degrees = \App\Models\Degree::orderBy('degree_title')->get();
+        
+        return view('courses', compact('courses', 'degrees'));
     }
 
     public function create()
     {
-        return view('addCourse');
+        $degrees = \App\Models\Degree::orderBy('degree_title')->get();
+        return view('addCourse', compact('degrees'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'course_name' => 'required|string|max:255|unique:courses,course_name',
+            'degree_id' => 'nullable|exists:degrees,id',
         ]);
 
         Course::create($validated);
@@ -45,13 +56,15 @@ class CourseController extends Controller
     public function edit(Course $course)
     {
         $this->logAllLevels('Course edit form opened.');
-        return view('editCourse', compact('course'));
+        $degrees = \App\Models\Degree::orderBy('degree_title')->get();
+        return view('editCourse', compact('course', 'degrees'));
     }
 
     public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
             'course_name' => 'required|string|max:255|unique:courses,course_name,' . $course->id,
+            'degree_id' => 'nullable|exists:degrees,id',
         ]);
 
         $course->update($validated);

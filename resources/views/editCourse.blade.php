@@ -61,6 +61,24 @@
     outline: none;
   }
 
+  select {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    cursor: pointer;
+  }
+
+  select:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
   .error {
     margin-top: 0.5rem;
     color: #EF4444;
@@ -102,6 +120,19 @@
       <label for="course_name">Course name</label>
       <input id="course_name" type="text" name="course_name" value="{{ old('course_name', $course->course_name) }}" required>
       @error('course_name')
+        <div class="error">{{ $message }}</div>
+      @enderror
+
+      <label for="degree_id">Degree (Optional)</label>
+      <select id="degree_id" name="degree_id">
+        <option value="">-- Select a Degree --</option>
+        @foreach($degrees as $degree)
+          <option value="{{ $degree->id }}" {{ old('degree_id', $course->degree_id) == $degree->id ? 'selected' : '' }}>
+            {{ $degree->degree_title }}
+          </option>
+        @endforeach
+      </select>
+      @error('degree_id')
         <div class="error">{{ $message }}</div>
       @enderror
 

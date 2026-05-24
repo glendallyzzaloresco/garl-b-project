@@ -43,7 +43,7 @@
 
   .teachers-page {
     padding: 2rem;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
   }
 
@@ -147,7 +147,7 @@
   .modern-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: var(--font-size-base);
+    font-size: 0.85rem;
   }
 
   .modern-table thead {
@@ -156,14 +156,22 @@
   }
 
   .modern-table th {
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 0.5rem 0.75rem;
     text-align: left;
     font-weight: 600;
     color: var(--text-main);
     text-transform: uppercase;
-    font-size: var(--font-size-sm);
+    font-size: 0.75rem;
     letter-spacing: 0.03em;
   }
+
+  .modern-table th:nth-child(1) { width: 5%; }
+  .modern-table th:nth-child(2) { width: 15%; }
+  .modern-table th:nth-child(3) { width: 15%; }
+  .modern-table th:nth-child(4) { width: 12%; }
+  .modern-table th:nth-child(5) { width: 18%; }
+  .modern-table th:nth-child(6) { width: 10%; }
+  .modern-table th:nth-child(7) { width: 25%; }
 
   .modern-table tbody tr {
     border-bottom: 1px solid var(--border-light);
@@ -175,18 +183,18 @@
   }
 
   .modern-table td {
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 0.6rem 0.75rem;
     vertical-align: middle;
     color: var(--text-main);
   }
 
   .avatar {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-md);
     background: linear-gradient(135deg, #3B82F6, #2563EB);
     color: white;
-    font-size: var(--font-size-sm);
+    font-size: 0.75rem;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -198,7 +206,7 @@
   .name-cell {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: 0.5rem;
   }
 
   .name-info p {
@@ -208,43 +216,59 @@
   .name-info .full-name {
     font-weight: 600;
     color: var(--text-main);
-    font-size: var(--font-size-base);
+    font-size: 0.9rem;
   }
 
   .name-info .middle-name {
-    font-size: var(--font-size-sm);
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    margin-top: 4px;
+    margin-top: 2px;
   }
 
   .badge {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 3px 6px;
     background-color: rgba(59, 130, 246, 0.1);
     color: #3B82F6;
     border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
+    font-size: 0.75rem;
     font-weight: 600;
+  }
+
+  .badge-green {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
   }
 
   .action-cell {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 4px;
     justify-content: flex-end;
+    flex-wrap: nowrap;
   }
 
   .btn {
-    padding: 6px 12px;
-    font-size: var(--font-size-sm);
+    padding: 5px 10px;
+    font-size: 0.8rem;
     border-radius: var(--radius-md);
     transition: all var(--transition-normal);
     font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     text-decoration: none;
     border: none;
     cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-label {
+    display: inline;
   }
 
   .btn-sm {
@@ -367,11 +391,37 @@
     }
 
     .action-cell {
-      flex-direction: column;
+      flex-direction: row;
+      gap: 3px;
     }
 
     .action-cell .btn {
-      width: 100%;
+      padding: 4px 6px;
+      gap: 2px;
+    }
+
+    .btn-label {
+      display: none;
+    }
+
+    .modern-table th:nth-child(5),
+    .modern-table td:nth-child(5) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .modern-table {
+      font-size: 0.8rem;
+    }
+
+    .btn {
+      padding: 4px 8px;
+      font-size: 0.75rem;
+    }
+
+    .action-cell {
+      gap: 3px;
     }
   }
 </style>
@@ -413,7 +463,7 @@
         <th>Contact</th>
         <th>Department</th>
         <th>Role</th>
-        <th width="200">Actions</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody id="table-body">
@@ -435,14 +485,14 @@
           <td><span class="badge">👨‍🏫 Teacher</span></td>
           <td>
             <div class="action-cell">
-              <a href="/teachers/{{ $teacher->id }}" class="btn btn-primary">
-                <i class="bi bi-eye"></i> View
+              <a href="/teachers/{{ $teacher->id }}" class="btn btn-primary" title="View Teacher">
+                <i class="bi bi-eye"></i> <span class="btn-label">View</span>
               </a>
-              <a href="/teachers/{{ $teacher->id }}/edit" class="btn btn-warning">
-                <i class="bi bi-pencil"></i> Edit
+              <a href="/teachers/{{ $teacher->id }}/edit" class="btn btn-warning" title="Edit Teacher">
+                <i class="bi bi-pencil"></i> <span class="btn-label">Edit</span>
               </a>
-              <button type="button" class="btn btn-danger js-delete-teacher" data-teacher-id="{{ $teacher->id }}">
-                <i class="bi bi-trash"></i> Delete
+              <button type="button" class="btn btn-danger js-delete-teacher" data-teacher-id="{{ $teacher->id }}" title="Delete Teacher">
+                <i class="bi bi-trash"></i> <span class="btn-label">Delete</span>
               </button>
             </div>
           </td>

@@ -657,7 +657,13 @@
                 </td>
                 <td>{{ $teacher->email }}</td>
                 <td>{{ $teacher->phone ?: 'N/A' }}</td>
-                <td>{{ $teacher->department ?: 'N/A' }}</td>
+                <td>
+                  @if($teacher->degree)
+                    <span style="background: rgba(34, 197, 94, 0.1); color: #16a34a; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;">{{ $teacher->degree->degree_title }}</span>
+                  @else
+                    <span style="color: #9CA3AF; font-size: 0.85rem;">No Department Assigned</span>
+                  @endif
+                </td>
                 <td><span style="background: rgba(59, 130, 246, 0.1); color: #3B82F6; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;">👨‍🏫 Teacher</span></td>
               </tr>
             @endforeach

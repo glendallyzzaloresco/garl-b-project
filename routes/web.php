@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentCoursesController;
+use App\Http\Controllers\CourseStudentController;
 use App\Http\Middleware\DownForMaintenanceMw;
 use App\Exports\StudentsExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -83,6 +84,44 @@ Route::middleware('group_middleware', 'maintenance', 'sessionUserAccount', 'forc
     Route::resource('/courses', CourseController::class)->except(['show'])->middleware('checkAdminRole');
     Route::resource('/students', StudentsController::class)->middleware('checkAdminRole');
     Route::resource('/teachers', TeachersController::class)->except(['create', 'store']);
+    
+    // Course-Student Management (Admin assigning students to courses)
+    Route::get('/course-students', [CourseStudentController::class, 'index'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.index');
+    
+    Route::get('/course-students/{course}', [CourseStudentController::class, 'show'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.show');
+    
+    Route::post('/course-students/{course}/assign/{student}', [CourseStudentController::class, 'assign'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.assign');
+    
+    Route::delete('/course-students/{course}/unassign/{student}', [CourseStudentController::class, 'unassign'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.unassign');
+    
+    Route::post('/course-students/{course}/bulk-assign', [CourseStudentController::class, 'bulkAssign'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.bulkAssign');
+    
+    // Student view - manage courses per student
+    Route::get('/course-students/students/list', [CourseStudentController::class, 'studentsList'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.studentsList');
+    
+    Route::get('/course-students/students/{student}/assign', [CourseStudentController::class, 'assignCourses'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.assignCourses');
+    
+    Route::post('/course-students/students/{student}/bulk-assign', [CourseStudentController::class, 'bulkAssignCourses'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.bulkAssignCourses');
+    
+    Route::delete('/course-students/students/{student}/remove/{course}', [CourseStudentController::class, 'removeCourse'])
+        ->middleware('checkAdminRole')
+        ->name('course-students.removeCourse');
 });
 
 

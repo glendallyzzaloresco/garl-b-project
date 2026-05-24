@@ -167,6 +167,7 @@ $(document).ready(function() {
         let e_mail = $('#e_mail').val();
         let phone = $('#phone').val();
         let department = $('#department').val();
+        let degree_id = $('#degree_id').val();
         let teacherId = $(this).attr('data-teacher-id');
         
         // Validate required fields
@@ -189,7 +190,8 @@ $(document).ready(function() {
                 l_name: l_name,
                 e_mail: e_mail,
                 phone: phone,
-                department: department
+                department: department,
+                degree_id: degree_id
             },
             success: function(response) {
                 console.log('Success response:', response);

@@ -160,6 +160,68 @@
       align-items: flex-start;
     }
   }
+
+  .filter-section {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+  }
+
+  .filter-section label {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .filter-section select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: border-color var(--transition-normal);
+  }
+
+  .filter-section select:hover {
+    border-color: #3B82F6;
+  }
+
+  .filter-section select:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .reset-filter {
+    padding: 0.5rem 1rem;
+    background: var(--text-secondary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-normal);
+  }
+
+  .reset-filter:hover {
+    background: var(--text-main);
+  }
+
+  .degree-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+  }
 </style>
 
 <div class="courses-page">
@@ -179,14 +241,31 @@
     <a href="{{ route('courses.create') }}" class="btn btn-primary">➕ Add Course</a>
   </div>
 
+  {{-- Degree Filter Section --}}
+  <div class="filter-section">
+    <label for="degree-filter">Filter by Degree:</label>
+    <select id="degree-filter" onchange="filterByCourse()">
+      <option value="">All Degrees</option>
+      @foreach($degrees as $degree)
+        <option value="{{ $degree->id }}" {{ request('degree_id') == $degree->id ? 'selected' : '' }}>
+          {{ $degree->degree_title }}
+        </option>
+      @endforeach
+    </select>
+    @if(request('degree_id'))
+      <a href="{{ route('courses.index') }}" class="reset-filter">✕ Reset Filter</a>
+    @endif
+  </div>
+
   <div class="table-wrapper">
     @if($courses->count() === 0)
-      <div class="empty">No courses yet.</div>
+      <div class="empty">No courses found{{ request('degree_id') ? ' for the selected degree' : '' }}.</div>
     @else
       <table class="modern-table">
         <thead>
           <tr>
             <th>Course Name</th>
+            <th>Degree</th>
             <th style="text-align:right;">Actions</th>
           </tr>
         </thead>
@@ -194,6 +273,13 @@
           @foreach($courses as $course)
             <tr>
               <td style="font-weight: 700;">{{ $course->course_name }}</td>
+              <td>
+                @if($course->degree)
+                  <span class="degree-badge">{{ $course->degree->degree_title }}</span>
+                @else
+                  <span style="color: var(--text-secondary); font-size: var(--font-size-sm);">No degree assigned</span>
+                @endif
+              </td>
               <td style="text-align:right;">
                 <div class="actions">
                   <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning">✏️ Edit</a>
@@ -212,4 +298,18 @@
     @endif
   </div>
 </div>
+
+<script>
+function filterByCourse() {
+  const degreeSelect = document.getElementById('degree-filter');
+  const degreeId = degreeSelect.value;
+  
+  if (degreeId) {
+    window.location.href = `{{ route('courses.index') }}?degree_id=${degreeId}`;
+  } else {
+    window.location.href = `{{ route('courses.index') }}`;
+  }
+}
+</script>
+
 @endsection

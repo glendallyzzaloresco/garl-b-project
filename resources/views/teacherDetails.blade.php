@@ -222,9 +222,34 @@
 
       <div class="section-block">
         <div class="section-title">
-          <i class="bi bi-shield-lock" style="color:var(--orange)"></i>
-          Account Details
+          <i class="bi bi-book" style="color:var(--orange)"></i>
+          Academic Information
         </div>
+        <div class="fields-row">
+          <div class="field-item f6">
+            <div class="field-label">Assigned Degree</div>
+            <div class="field-value">
+              @if($teacher->degree)
+                {{ $teacher->degree->degree_title }}
+              @else
+                <span class="na">No degree assigned</span>
+              @endif
+            </div>
+          </div>
+          <div class="field-item f1">
+            <div class="field-label">Department</div>
+            <div class="field-value">
+              @if($teacher->department)
+                {{ $teacher->department }}
+              @else
+                <span class="na">Not provided</span>
+              @endif
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
         <div class="fields-row">
           <div class="field-item f1">
             <div class="field-label">Username</div>
