@@ -112,7 +112,27 @@
     position: relative;
     max-width: 400px;
     width: 100%;
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+  }
+
+  .toolbar .search-box {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
   }
 
   .search-box input {
@@ -301,6 +321,17 @@
     box-shadow: var(--shadow-md);
   }
 
+  .btn-success {
+    background-color: var(--success);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: #15803d;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
   .pagination-wrapper {
     display: flex;
     justify-content: space-between;
@@ -371,6 +402,15 @@
       justify-content: center;
     }
 
+    .toolbar-actions {
+      width: 100%;
+    }
+
+    .toolbar-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
     .action-cell {
       flex-direction: column;
     }
@@ -406,12 +446,23 @@
   </div>
 @endif
 
-<div class="search-box">
-  <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
-    <path d="M10 10l3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-  </svg>
-  <input type="text" placeholder="Search by name, email, or degree…" id="search-input" class="form-control" />
+<div class="toolbar">
+  <div class="search-box">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M10 10l3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <input type="text" placeholder="Search by name, email, or degree…" id="search-input" class="form-control" />
+  </div>
+
+  <div class="toolbar-actions">
+    <a href="/export-students" class="btn btn-success btn-sm">
+      <i class="bi bi-file-earmark-excel"></i> Export Excel
+    </a>
+    <a href="{{ route('generatePdf') }}" class="btn btn-secondary btn-sm">
+      <i class="bi bi-file-earmark-pdf"></i> Export PDF
+    </a>
+  </div>
 </div>
 
 <div class="table-wrapper">
