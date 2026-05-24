@@ -116,7 +116,7 @@
             padding: 16px 24px;
             border-radius: 12px;
             box-shadow: 0 10px 32px rgba(16, 185, 129, 0.35);
-            display: flex;
+            display: none;
             align-items: center;
             gap: 12px;
             font-size: 15px;

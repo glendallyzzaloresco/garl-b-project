@@ -48,7 +48,9 @@ Route::middleware('group_middleware', 'maintenance', 'sessionUserAccount', 'forc
     Route::get('/dashboard', [PagesController::class, 'adminDashboard'])->middleware('checkAdminRole')->name('dashboard');
     Route::get('/demo', [PagesController::class, 'demo'])->name('demo');
     Route::get('/teacher', [PagesController::class, 'teacherDashboard'])->name('teacher.dashboard');
+    Route::post('/teacher/avatar', [PagesController::class, 'uploadTeacherAvatar'])->name('teacher.avatar.upload');
     Route::get('/student/{student}', [PagesController::class, 'studentDashboard'])->name('student.dashboard');
+    Route::post('/student/{student}/avatar', [PagesController::class, 'uploadStudentAvatar'])->name('student.avatar.upload');
     Route::get('/user_profile', [PagesController::class, 'userProfile']);
     Route::get('/user_posts', [PagesController::class, 'userPosts']);
     Route::post('/student_courses', [PagesController::class, 'studentCourses']);

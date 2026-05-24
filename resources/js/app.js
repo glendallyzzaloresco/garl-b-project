@@ -456,6 +456,13 @@ $(document).ready(function() {
                 success: function(response) {
                     console.log('Student added successfully:', response);
                     showToast('✓ Student added successfully!', 'success');
+
+                  // Cross-tab sync: notify other open tabs/windows to refresh student list.
+                  try {
+                    localStorage.setItem('sync:students', String(Date.now()));
+                  } catch (e) {
+                    // ignore
+                  }
            
                     $('#fname, #mname, #lname, #email, #contactInfo, #username, #password').val('');
                     $('#degree_id').val('');
@@ -558,6 +565,13 @@ $(document).ready(function() {
               success: function(response) {
                 console.log('Teacher added successfully:', response);
                 showToast('✓ Teacher added successfully!', 'success');
+
+                // Cross-tab sync: notify other open tabs/windows to refresh teacher list.
+                try {
+                  localStorage.setItem('sync:teachers', String(Date.now()));
+                } catch (e) {
+                  // ignore
+                }
 
                 $('#fname, #mname, #lname, #email, #contact_no, #username, #password').val('');
 

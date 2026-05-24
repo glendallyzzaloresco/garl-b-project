@@ -14,6 +14,7 @@ class UserAccount extends Model
         'password',
         'role',
         'is_active',
+        'avatar',
         'password_changed'
     ];
     

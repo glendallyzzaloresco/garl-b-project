@@ -72,6 +72,31 @@
   align-items: center;
 }
 
+.hero-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-avatar-placeholder {
+  font-size: 34px;
+  line-height: 1;
+}
+
 .hero-text h2 {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
@@ -196,6 +221,58 @@
   border-bottom: 2px solid var(--border);
 }
 
+.avatar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.avatar-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar-preview img {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.avatar-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.avatar-title {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.avatar-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-2);
+}
+
+.avatar-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.avatar-form input[type="file"] {
+  max-width: 280px;
+}
+
 .profile-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -310,6 +387,14 @@
           <span id="currentDate"></span>
         </div>
       </div>
+
+      <div class="hero-avatar" aria-label="Profile image">
+        @if(!empty($student->avatar))
+          <img src="{{ asset($student->avatar) }}" alt="Profile image" />
+        @else
+          <span class="hero-avatar-placeholder">👤</span>
+        @endif
+      </div>
     </div>
   </div>
 
@@ -361,6 +446,26 @@
   <!-- Profile Details Section -->
   <div class="profile-section">
     <h3>📋 Personal Information</h3>
+
+    <div class="avatar-row">
+      <div class="avatar-preview">
+        @if(!empty($student->avatar))
+          <img src="{{ asset($student->avatar) }}" alt="Profile image" />
+        @else
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Crect width='100%25' height='100%25' fill='%23F8FAFC'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='28'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E" alt="No profile image" />
+        @endif
+        <div class="avatar-meta">
+          <div class="avatar-title">Profile Image</div>
+          <div class="avatar-subtitle">Upload a photo to show on your dashboard</div>
+        </div>
+      </div>
+
+      <form class="avatar-form" action="{{ route('student.avatar.upload', ['student' => $student->id]) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="avatar" accept="image/*" class="form-control" required />
+        <button type="submit" class="btn btn-primary">⬆️ Upload</button>
+      </form>
+    </div>
     
     <div class="profile-row">
       <div class="profile-field">

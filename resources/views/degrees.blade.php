@@ -282,6 +282,15 @@
     <i class="bi bi-check-circle"></i>
     <div class="alert-content">{{ $message }}</div>
   </div>
+
+  <script>
+    // Notify other open tabs/windows (e.g., a separate list view) to refresh.
+    try {
+      localStorage.setItem('sync:degrees', String(Date.now()));
+    } catch (e) {
+      // Ignore storage errors (private mode / disabled storage)
+    }
+  </script>
 @endif
 
 <div class="table-wrapper">
@@ -339,5 +348,16 @@
 </div>
 
 </div>
+
+<script>
+  // Auto-refresh this page when another tab updates/deletes/adds a degree.
+  $(function () {
+    $(window).on('storage', function (e) {
+      const evt = e.originalEvent;
+      if (!evt || evt.key !== 'sync:degrees') return;
+      window.location.reload();
+    });
+  });
+</script>
 
 @endsection

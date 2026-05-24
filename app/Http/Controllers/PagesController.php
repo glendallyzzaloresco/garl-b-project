@@ -10,6 +10,7 @@ use App\Models\Teacher;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Nette\Utils\Image as UtilsImage;
 use Intervention\Image\ImageManagerStatic as ImageManager;
@@ -64,6 +65,51 @@ class PagesController extends Controller
     }
 
     /**
+     * Upload Student Avatar (Profile Image)
+     */
+    public function uploadStudentAvatar(Request $request, Student $student)
+    {
+        $loggedUserId = Session::get('user_id');
+        $loggedRole = Session::get('logged_role');
+
+        if ($loggedRole !== 'student' || ! $loggedUserId || (int) $student->user_account_id !== (int) $loggedUserId) {
+            return redirect('/')->with('error', 'Unauthorized access');
+        }
+
+        $validated = $request->validate([
+            'avatar' => 'required|image|max:2048',
+        ]);
+
+        $file = $request->file('avatar');
+        if (! $file) {
+            return redirect()->back()->with('error', 'No image selected.');
+        }
+
+        $dir = public_path('uploads/avatars');
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $filename = 'student_' . $student->id . '_' . Str::uuid() . '.' . $extension;
+
+        // Delete old avatar if it lives in our uploads folder
+        if ($student->avatar && str_starts_with($student->avatar, 'uploads/avatars/')) {
+            $oldPath = public_path($student->avatar);
+            if (is_file($oldPath)) {
+                @unlink($oldPath);
+            }
+        }
+
+        $file->move($dir, $filename);
+
+        $student->avatar = 'uploads/avatars/' . $filename;
+        $student->save();
+
+        return redirect()->back()->with('success', 'Profile image updated successfully.');
+    }
+
+    /**
      * Teacher Dashboard
      */
     public function teacherDashboard()
@@ -76,6 +122,55 @@ class PagesController extends Controller
         }
         
         return view('teacherDashboard', compact('teacher'));
+    }
+
+    /**
+     * Upload Teacher Avatar (Profile Image)
+     */
+    public function uploadTeacherAvatar(Request $request)
+    {
+        $loggedUserId = Session::get('user_id');
+        $loggedRole = Session::get('logged_role');
+
+        if ($loggedRole !== 'teacher' || ! $loggedUserId) {
+            return redirect('/')->with('error', 'Unauthorized access');
+        }
+
+        $teacher = UserAccount::find($loggedUserId);
+        if (! $teacher || $teacher->role !== 'teacher') {
+            return redirect('/')->with('error', 'Unauthorized access');
+        }
+
+        $request->validate([
+            'avatar' => 'required|image|max:2048',
+        ]);
+
+        $file = $request->file('avatar');
+        if (! $file) {
+            return redirect()->back()->with('error', 'No image selected.');
+        }
+
+        $dir = public_path('uploads/avatars');
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $extension = $file->getClientOriginalExtension() ?: 'jpg';
+        $filename = 'teacher_' . $teacher->id . '_' . Str::uuid() . '.' . $extension;
+
+        if ($teacher->avatar && str_starts_with($teacher->avatar, 'uploads/avatars/')) {
+            $oldPath = public_path($teacher->avatar);
+            if (is_file($oldPath)) {
+                @unlink($oldPath);
+            }
+        }
+
+        $file->move($dir, $filename);
+
+        $teacher->avatar = 'uploads/avatars/' . $filename;
+        $teacher->save();
+
+        return redirect()->back()->with('success', 'Profile image updated successfully.');
     }
 
     /**

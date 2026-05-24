@@ -15,6 +15,7 @@ class Student extends Model
         'lname',
         'email',
         'contactInfo',
+        'avatar',
         'degree_id',
         'user_account_id'
     ];

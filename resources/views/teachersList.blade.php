@@ -488,6 +488,15 @@ function reloadTeacherList() {
     });
 }
 
+// Cross-tab sync: refresh immediately when another tab broadcasts a teacher change.
+$(function () {
+  $(window).on('storage', function (e) {
+    const evt = e.originalEvent;
+    if (!evt || evt.key !== 'sync:teachers') return;
+    reloadTeacherList();
+  });
+});
+
 // Simple hash function to detect data changes
 function hashCode(str) {
     let hash = 0;

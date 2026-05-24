@@ -456,6 +456,15 @@ function reloadStudentList() {
     });
 }
 
+// Cross-tab sync: refresh immediately when another tab broadcasts a student change.
+$(function () {
+  $(window).on('storage', function (e) {
+    const evt = e.originalEvent;
+    if (!evt || evt.key !== 'sync:students') return;
+    reloadStudentList();
+  });
+});
+
 // Simple hash function to detect data changes
 function hashCode(str) {
     let hash = 0;
