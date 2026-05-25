@@ -429,6 +429,12 @@ input[type="checkbox"] {
         <strong>Total Students Enrolled:</strong>
         <span class="student-count">{{ $enrolledStudents->count() }}</span>
       </div>
+      @if($course->teacher)
+        <div class="meta-item">
+          <strong>Instructor:</strong>
+          <span>{{ $course->teacher->fname }} {{ $course->teacher->lname }}</span>
+        </div>
+      @endif
     </div>
   </div>
 

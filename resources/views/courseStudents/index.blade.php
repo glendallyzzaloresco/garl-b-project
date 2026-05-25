@@ -304,6 +304,12 @@
             <i class="bi bi-people-fill"></i>
             <span class="student-count">{{ $course->students_count }} Student{{ $course->students_count !== 1 ? 's' : '' }}</span>
           </div>
+          @if($course->teacher)
+            <div class="course-info" style="margin-top: 0.5rem;">
+              <i class="bi bi-person-circle"></i>
+              <span>{{ $course->teacher->fname }} {{ $course->teacher->lname }}</span>
+            </div>
+          @endif
         </a>
       @endforeach
     </div>

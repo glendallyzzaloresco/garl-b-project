@@ -490,6 +490,40 @@
       <a href="/logout" class="btn btn-secondary">🚪 Logout</a>
     </div>
   </div>
+
+  <!-- Courses Section -->
+  @if(isset($courses) && $courses->count() > 0)
+    <div class="profile-section" style="margin-top: 2rem;">
+      <h3>📚 Your Courses</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        @foreach($courses as $course)
+          <div style="background: var(--bg); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--blue);">
+            <h4 style="color: var(--text); margin-bottom: 0.5rem; font-size: 1.1rem;">{{ $course->course_name }}</h4>
+            <p style="color: var(--text-2); font-size: 0.9rem; margin: 0.5rem 0;">
+              <i class="bi bi-people-fill"></i> <strong>{{ $course->students->count() }}</strong> Student{{ $course->students->count() !== 1 ? 's' : '' }} Enrolled
+            </p>
+            @if($course->students->count() > 0)
+              <div style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
+                <p style="font-size: 0.85rem; font-weight: 600; color: var(--text-2); margin-bottom: 0.5rem;">Enrolled Students:</p>
+                @foreach($course->students as $student)
+                  <div style="font-size: 0.85rem; color: var(--text); padding: 0.3rem 0; border-bottom: 1px solid rgba(229, 231, 235, 0.5);">
+                    • {{ $student->fname }} {{ $student->lname }}
+                  </div>
+                @endforeach
+              </div>
+            @else
+              <p style="color: var(--text-2); font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;">No students enrolled yet</p>
+            @endif
+          </div>
+        @endforeach
+      </div>
+    </div>
+  @else
+    <div class="profile-section" style="margin-top: 2rem;">
+      <h3>📚 Your Courses</h3>
+      <p style="color: var(--text-2); text-align: center; padding: 2rem;">No courses assigned to you yet.</p>
+    </div>
+  @endif
 </div>
 
 <script>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Course;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
@@ -120,8 +121,11 @@ class PagesController extends Controller
         if (!$teacher || $teacher->role !== 'teacher') {
             return redirect('/')->with('error', 'Unauthorized access');
         }
+
+        // Get courses assigned to this teacher with their enrolled students
+        $courses = Course::where('teacher_id', $teacher->id)->with('students')->get();
         
-        return view('teacherDashboard', compact('teacher'));
+        return view('teacherDashboard', compact('teacher', 'courses'));
     }
 
     /**

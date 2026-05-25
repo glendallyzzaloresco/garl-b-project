@@ -514,13 +514,13 @@
                         <li><a href="{{ route('degrees.index') }}">Degrees</a></li>
                         <li><a href="{{ route('courses.index') }}">Courses</a></li>
                         <li><a href="{{ route('course-students.index') }}">Course Student</a></li>
-                        <li><a href="/user_profile">Profile</a></li>
-                        <li><a href="/user_posts">Posts</a></li>
+                        <!-- <li><a href="/user_profile">Profile</a></li> -->
+                        <!-- <li><a href="/user_posts">Posts</a></li> -->
                         <li><a href="{{ route('generatePdf') }}">PDF</a></li>
                         <li><a href="{{ route('upload.image') }}">Upload image</a></li>
                         <li><a href="/activity-log">Activity Log</a></li>
                         <li><a href="{{ route('about') }}">About</a></li>
-                        <li><a href="{{ route('demo') }}">Demo</a></li>
+                        <!-- <li><a href="{{ route('demo') }}">Demo</a></li> -->
                     {{-- Default Navigation (if no role is set) --}}
                     @else
                         <li><a href="{{ route('dashboard') }}">Dashboard</a></li>

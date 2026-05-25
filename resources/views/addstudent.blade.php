@@ -176,26 +176,6 @@
       </div>
     </div>
 
-    {{-- Courses (optional) --}}
-    <div class="form-group">
-      <label>Enroll Courses</label>
-      <div class="checkbox-help">Select one or more courses to enroll this student in.</div>
-
-      @if(isset($courses) && $courses->count() > 0)
-        <div class="checkbox-grid">
-          @foreach($courses as $course)
-            <label class="checkbox-item">
-              <input type="checkbox" name="course_ids[]" value="{{ $course->id }}" {{ in_array($course->id, (array) old('course_ids', [])) ? 'checked' : '' }} />
-              <span>{{ $course->course_name }}</span>
-            </label>
-          @endforeach
-        </div>
-      @else
-        <div class="checkbox-help">No courses available yet. Add courses first in the Admin Courses page.</div>
-      @endif
-      <span class="form-error error-course_ids" style="display:none;"></span>
-    </div>
-
     <div class="form-group">
         <label for="username">Username</label>
         <input type="text" id="username" class="form-control" name="username" placeholder="Enter username" value="" autocomplete="off" required />

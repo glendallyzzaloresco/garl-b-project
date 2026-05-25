@@ -48,7 +48,7 @@
 
   .students-page {
     padding: 2rem;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
   }
 
@@ -200,7 +200,7 @@
   }
 
   .modern-table td {
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 1rem 1.5rem;
     vertical-align: middle;
     color: var(--text-main);
   }
@@ -254,12 +254,14 @@
 
   .action-cell {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 0.75rem;
     justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
   }
 
   .btn {
-    padding: 6px 12px;
+    padding: 8px 14px;
     font-size: var(--font-size-sm);
     border-radius: var(--radius-md);
     transition: all var(--transition-normal);
@@ -270,6 +272,7 @@
     text-decoration: none;
     border: none;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .btn-sm {

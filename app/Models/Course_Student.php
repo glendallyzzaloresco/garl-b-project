@@ -25,4 +25,9 @@ class Course_Student extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
+
+    public function teacher()
+    {
+        return $this->course()->first()?->teacher();
+    }
 }

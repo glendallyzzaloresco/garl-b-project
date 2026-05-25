@@ -154,7 +154,7 @@ class StudentsController extends Controller
     {
         $degrees = Degree::all();
         $courses = Course::query()->orderBy('course_name')->get();
-        $enrolledCourseIds = $student->courses()->pluck('id')->all();
+        $enrolledCourseIds = $student->courses->pluck('id')->all();
         Log::info('Student edit form opened.');
         return view('editStudent')
             ->with('student', $student)
