@@ -421,12 +421,12 @@
       </div>
 
       <div class="form-group form-row full">
-        <label for="degree_id">Department (Optional)</label>
-        <select id="degree_id" name="degree_id" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; transition: all 0.3s ease; font-family: inherit; background: #fafbfc; cursor: pointer;">
-          <option value="">-- Select a Department --</option>
-          @foreach ($degrees as $degree)
-            <option value="{{ $degree->id }}" {{ old('degree_id') == $degree->id ? 'selected' : '' }}>
-              {{ $degree->degree_title }}
+        <label for="course_id">Assign Teacher to Course </label>
+        <select id="course_id" name="course_id" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; transition: all 0.3s ease; font-family: inherit; background: #fafbfc; cursor: pointer;">
+          <option value="">-- Select a Course --</option>
+          @foreach ($courses as $course)
+            <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+              {{ $course->course_code }} - {{ $course->course_name }}
             </option>
           @endforeach
         </select>
@@ -463,7 +463,7 @@
 
 <script>
 $(document).ready(function() {
-  $('#addTeacherBtn').on('click', function(e) {
+  $('#saveTeacher').on('click', function(e) {
     e.preventDefault();
 
     // Get CSRF token from meta tag
@@ -476,7 +476,7 @@ $(document).ready(function() {
       lname: $('#lname').val(),
       email: $('#email').val(),
       contact_no: $('#contact_no').val(),
-      degree_id: $('#degree_id').val(),
+      course_id: $('#course_id').val(),
       username: $('#username').val(),
       password: $('#password').val(),
       _token: csrfToken
@@ -488,17 +488,31 @@ $(document).ready(function() {
       return;
     }
 
+    // Disable button to prevent double submission
+    $('#saveTeacher').prop('disabled', true).text('Adding Teacher...');
+
     // Send AJAX request
     $.ajax({
       url: "{{ route('teachers.store') }}",
       type: 'POST',
       data: formData,
+      dataType: 'json',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       success: function(response) {
-        // Clear form
-        $('#teacher-form')[0].reset();
-        // Redirect or show success message
-        alert('Teacher added successfully!');
-        window.location.href = '/dashboard';
+        if (response.success) {
+          // Show success message
+          alert(response.message || 'Teacher added successfully!');
+          // Redirect to dashboard
+          setTimeout(function() {
+            window.location.href = '/dashboard';
+          }, 500);
+        } else {
+          alert(response.message || 'An error occurred.');
+          $('#saveTeacher').prop('disabled', false).text('Add Teacher');
+        }
       },
       error: function(xhr) {
         // Handle validation errors
@@ -509,9 +523,12 @@ $(document).ready(function() {
             errorMessage += '- ' + value[0] + '\n';
           });
           alert(errorMessage);
+        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+          alert('Error: ' + xhr.responseJSON.message);
         } else {
           alert('An error occurred. Please try again.');
         }
+        $('#saveTeacher').prop('disabled', false).text('Add Teacher');
       }
     });
   });

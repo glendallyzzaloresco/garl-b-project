@@ -12,7 +12,13 @@ class CourseStudentController extends Controller
     // Display all courses with enrolled students count
     public function index()
     {
-        $courses = Course::withCount('students')->orderBy('course_name')->get();
+        $courses = Course::with(['teacher', 'degree'])
+            ->withCount('students')
+            ->orderBy('course_name')
+            ->get()
+            ->groupBy(function($course) {
+                return $course->degree ? $course->degree->degree_title : 'Other';
+            });
         
         return view('courseStudents.index', [
             'courses' => $courses,

@@ -51,7 +51,6 @@ class StudentController extends Controller
                 'fname' => $request->f_name,
                 'mname' => $request->m_name,
                 'lname' => $request->l_name,
-                'email' => $request->e_mail,
                 'contactInfo' => $request->contac_no,
                 'degree_id' => $request->degree_id,
                 'user_account_id' => $user->id,
@@ -89,7 +88,6 @@ class StudentController extends Controller
             'fname' => $request->f_name,
             'mname' => $request->m_name,
             'lname' => $request->l_name,
-            'email' => $request->e_mail,
             'contactInfo' => $request->contac_no,
             'degree_id' => $request->degree_id,
         ]);

@@ -225,7 +225,7 @@
           </div>
         </div>
 
-        {{-- Row 2: Contact & Department --}}
+        {{-- Row 2: Contact & Course --}}
         <div class="form-row">
           <div class="form-group">
             <label for="e_mail">Email</label>
@@ -240,25 +240,16 @@
           </div>
 
           <div class="form-group">
-            <label for="department">Department</label>
-            <input type="text" id="department" class="form-control" name="department" value="{{ old('department', $teacher->department) }}" />
-            <span class="form-error error-department" style="display:none;"></span>
-          </div>
-        </div>
-
-        {{-- Row 3: Department --}}
-        <div class="form-row two-col">
-          <div class="form-group">
-            <label for="degree_id">Department (Optional)</label>
-            <select id="degree_id" class="form-control" name="degree_id">
-              <option value="">-- Select a Department --</option>
-              @foreach ($degrees as $degree)
-                <option value="{{ $degree->id }}" {{ old('degree_id', $teacher->degree_id) == $degree->id ? 'selected' : '' }}>
-                  {{ $degree->degree_title }}
+            <label for="course_id">Assign Teacher to Course</label>
+            <select id="course_id" name="course_id" class="form-control">
+              <option value="">-- Select a Course --</option>
+              @foreach($courses as $course)
+                <option value="{{ $course->id }}" {{ ($assignedCourse && $assignedCourse->id == $course->id) ? 'selected' : '' }}>
+                  {{ $course->course_code }} - {{ $course->course_name }}
                 </option>
               @endforeach
             </select>
-            <span class="form-error error-degree_id" style="display:none;"></span>
+            <span class="form-error error-course_id" style="display:none;"></span>
           </div>
         </div>
 

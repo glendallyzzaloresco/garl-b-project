@@ -281,7 +281,7 @@
 
         {{-- Courses (optional) --}}
         <div class="form-group">
-          <label>Enroll Courses</label>
+          <label style="color:#111827">Enrolled Courses</label>
           <div class="checkbox-help">Select one or more courses for this student. Uncheck all to remove enrollments.</div>
 
           {{-- ensures server can detect intentional update even when none checked --}}
@@ -296,7 +296,7 @@
                 @endphp
                 <label class="checkbox-item">
                   <input type="checkbox" name="course_ids[]" value="{{ $course->id }}" {{ $isChecked ? 'checked' : '' }} />
-                  <span>{{ $course->course_name }}</span>
+                  <span>{{ $course->course_code }} - {{ $course->course_name }}</span>
                 </label>
               @endforeach
             </div>

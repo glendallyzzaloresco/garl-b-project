@@ -379,7 +379,7 @@
   <div class="hero-panel">
     <div class="hero-content">
       <div class="hero-text">
-        <h2>Welcome, {{ $teacher->username }}! 👋</h2>
+        <h2>Welcome, {{ $user->username }}! 👋</h2>
         <p class="hero-subtitle">Here's an overview of your teaching information</p>
         <div class="hero-date">
           <span>📅</span>
@@ -388,8 +388,8 @@
       </div>
 
       <div class="hero-avatar" aria-label="Profile image">
-        @if(!empty($teacher->avatar))
-          <img src="{{ asset($teacher->avatar) }}" alt="Profile image" />
+        @if(!empty($user->avatar))
+          <img src="{{ asset($user->avatar) }}" alt="Profile image" />
         @else
           <span class="hero-avatar-placeholder">👤</span>
         @endif
@@ -408,7 +408,7 @@
         </div>
       </div>
       <p class="card-value" style="font-size: 1rem; color: var(--text); word-break: break-all;">
-        {{ $teacher->email }}
+        {{ $user->email }}
       </p>
       <p class="card-label">Your contact email</p>
     </div>
@@ -422,7 +422,7 @@
         </div>
       </div>
       <p class="card-value" style="font-size: 1.3rem; color: var(--text);">
-        {{ ucfirst($teacher->role) }}
+        {{ ucfirst($user->role) }}
       </p>
       <p class="card-label">Your account role</p>
     </div>
@@ -450,8 +450,8 @@
 
     <div class="avatar-row">
       <div class="avatar-preview">
-        @if(!empty($teacher->avatar))
-          <img src="{{ asset($teacher->avatar) }}" alt="Profile image" />
+        @if(!empty($user->avatar))
+          <img src="{{ asset($user->avatar) }}" alt="Profile image" />
         @else
           <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Crect width='100%25' height='100%25' fill='%23F8FAFC'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='28'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E" alt="No profile image" />
         @endif
@@ -471,59 +471,26 @@
     <div class="profile-row">
       <div class="profile-field">
         <label class="profile-field-label">Username</label>
-        <div class="profile-field-value">{{ $teacher->username }}</div>
+        <div class="profile-field-value">{{ $user->username }}</div>
       </div>
       
       <div class="profile-field">
         <label class="profile-field-label">Email</label>
-        <div class="profile-field-value">{{ $teacher->email }}</div>
+        <div class="profile-field-value">{{ $user->email }}</div>
       </div>
       
       <div class="profile-field">
         <label class="profile-field-label">Role</label>
-        <div class="profile-field-value">{{ ucfirst($teacher->role) }}</div>
+        <div class="profile-field-value">{{ ucfirst($user->role) }}</div>
       </div>
     </div>
 
     <div class="btn-group">
       <a href="/change-password" class="btn btn-primary">🔐 Change Password</a>
+      <a href="/teacher/courses/enrolled-students" class="btn btn-success">📚 View Assigned Course & Students</a>
       <a href="/logout" class="btn btn-secondary">🚪 Logout</a>
     </div>
   </div>
-
-  <!-- Courses Section -->
-  @if(isset($courses) && $courses->count() > 0)
-    <div class="profile-section" style="margin-top: 2rem;">
-      <h3>📚 Your Courses</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-        @foreach($courses as $course)
-          <div style="background: var(--bg); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--blue);">
-            <h4 style="color: var(--text); margin-bottom: 0.5rem; font-size: 1.1rem;">{{ $course->course_name }}</h4>
-            <p style="color: var(--text-2); font-size: 0.9rem; margin: 0.5rem 0;">
-              <i class="bi bi-people-fill"></i> <strong>{{ $course->students->count() }}</strong> Student{{ $course->students->count() !== 1 ? 's' : '' }} Enrolled
-            </p>
-            @if($course->students->count() > 0)
-              <div style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
-                <p style="font-size: 0.85rem; font-weight: 600; color: var(--text-2); margin-bottom: 0.5rem;">Enrolled Students:</p>
-                @foreach($course->students as $student)
-                  <div style="font-size: 0.85rem; color: var(--text); padding: 0.3rem 0; border-bottom: 1px solid rgba(229, 231, 235, 0.5);">
-                    • {{ $student->fname }} {{ $student->lname }}
-                  </div>
-                @endforeach
-              </div>
-            @else
-              <p style="color: var(--text-2); font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;">No students enrolled yet</p>
-            @endif
-          </div>
-        @endforeach
-      </div>
-    </div>
-  @else
-    <div class="profile-section" style="margin-top: 2rem;">
-      <h3>📚 Your Courses</h3>
-      <p style="color: var(--text-2); text-align: center; padding: 2rem;">No courses assigned to you yet.</p>
-    </div>
-  @endif
 </div>
 
 <script>

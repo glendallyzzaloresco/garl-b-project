@@ -15,6 +15,7 @@ use App\Http\Controllers\StudentCoursesController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Middleware\DownForMaintenanceMw;
 use App\Exports\StudentsExport;
+use App\Exports\TeachersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ImageController;
 
@@ -51,6 +52,7 @@ Route::middleware('group_middleware', 'maintenance', 'sessionUserAccount', 'forc
     Route::get('/dashboard', [PagesController::class, 'adminDashboard'])->middleware('checkAdminRole')->name('dashboard');
     Route::get('/demo', [PagesController::class, 'demo'])->name('demo');
     Route::get('/teacher', [PagesController::class, 'teacherDashboard'])->name('teacher.dashboard');
+    Route::get('/teacher/courses/enrolled-students', [PagesController::class, 'teacherEnrolledStudents'])->name('teacher.enrolled.students');
     Route::post('/teacher/avatar', [PagesController::class, 'uploadTeacherAvatar'])->name('teacher.avatar.upload');
     Route::get('/student/{student}', [PagesController::class, 'studentDashboard'])->name('student.dashboard');
     Route::post('/student/{student}/avatar', [PagesController::class, 'uploadStudentAvatar'])->name('student.avatar.upload');
@@ -130,6 +132,11 @@ Route::get('/generate-pdf', [PDFController::class, 'generatePDF'])->name('genera
 Route::get('/export-students', function (){
     return Excel::download(new StudentsExport, 'students.xlsx');
 });
+Route::get('/export-teachers', function (){
+    return Excel::download(new TeachersExport, 'teachers.xlsx');
+});
+Route::get('/export-teachers-pdf', [PDFController::class, 'exportTeachersPDF'])->name('exportTeachersPDF');
+Route::get('/export-students-pdf', [PDFController::class, 'exportStudentsPDF'])->name('exportStudentsPDF');
 
 Route::get('/image-form', function() {
     return view ('upload');

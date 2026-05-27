@@ -301,10 +301,10 @@ input[type="checkbox"] {
             <div class="course-item">
               <div class="course-info">
                 <div class="course-icon">
-                  {{ strtoupper(substr($course->course_name, 0, 1)) }}
+                  {{ strtoupper(substr($course->course_code, 0, 1)) }}
                 </div>
                 <div class="course-details">
-                  <div class="course-details-name">{{ $course->course_name }}</div>
+                  <div class="course-details-name">{{ $course->course_code }} - {{ $course->course_name }}</div>
                   <div class="course-details-degree">
                     @if($course->degree)
                       <i class="bi bi-mortarboard"></i> {{ $course->degree->degree_title }}

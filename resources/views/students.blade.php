@@ -462,7 +462,7 @@
     <a href="/export-students" class="btn btn-success btn-sm">
       <i class="bi bi-file-earmark-excel"></i> Export Excel
     </a>
-    <a href="{{ route('generatePdf') }}" class="btn btn-secondary btn-sm">
+    <a href="{{ route('exportStudentsPDF') }}" class="btn btn-secondary btn-sm">
       <i class="bi bi-file-earmark-pdf"></i> Export PDF
     </a>
   </div>

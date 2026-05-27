@@ -187,20 +187,32 @@
 }
 
 .btn-danger {
-  background: var(--border);
-  color: var(--text);
+  background: var(--red);
+  color: white;
 }
 
 .btn-danger:hover {
-  background: #d1d5db;
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-success {
+  background: var(--green);
+  color: white;
+}
+
+.btn-success:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* Search Box */
 .search-box {
   position: relative;
-  max-width: 400px;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 .search-box input {
@@ -630,6 +642,20 @@
   <div id="teachers-section" style="margin-top: 3rem; padding: 2rem; background: var(--card); border: 1px solid var(--border); border-radius: 12px;">
     <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem;">👨‍🏫 Manage Teachers</h2>
     
+    <!-- Search Box with Export Buttons -->
+    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
+      <div class="search-box" style="flex: 1;">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchTeachersInput" placeholder="Search teachers by name or email..." onkeyup="filterTeachersTable()">
+      </div>
+      <a href="/export-teachers" class="btn btn-success" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; white-space: nowrap;">
+        <i class="bi bi-file-earmark-excel"></i> Excel
+      </a>
+      <a href="{{ route('exportTeachersPDF') }}" class="btn btn-danger" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; white-space: nowrap;">
+        <i class="bi bi-file-earmark-pdf"></i> PDF
+      </a>
+    </div>
+    
     <!-- Teachers Table -->
     <div class="table-wrapper">
       @if($teachers->count() > 0)
@@ -639,7 +665,7 @@
               <th>Full Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Department</th>
+              <th>Assigned Course</th>
               <th>Role</th>
             </tr>
           </thead>
@@ -658,10 +684,13 @@
                 <td>{{ $teacher->email }}</td>
                 <td>{{ $teacher->phone ?: 'N/A' }}</td>
                 <td>
-                  @if($teacher->degree)
-                    <span style="background: rgba(34, 197, 94, 0.1); color: #16a34a; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;">{{ $teacher->degree->degree_title }}</span>
+                  @php
+                    $assignedCourse = \App\Models\Course::where('teacher_id', $teacher->id)->first();
+                  @endphp
+                  @if($assignedCourse)
+                    <span style="background: rgba(59, 130, 246, 0.1); color: #3B82F6; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;">{{ $assignedCourse->course_code }} - {{ $assignedCourse->course_name }}</span>
                   @else
-                    <span style="color: #9CA3AF; font-size: 0.85rem;">No Department Assigned</span>
+                    <span style="color: #9CA3AF; font-size: 0.85rem;">No course assigned</span>
                   @endif
                 </td>
                 <td><span style="background: rgba(59, 130, 246, 0.1); color: #3B82F6; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;">👨‍🏫 Teacher</span></td>
@@ -702,6 +731,28 @@
   function filterTable() {
     const input = document.getElementById('searchInput');
     const table = document.getElementById('usersTable');
+    const tr = table.getElementsByTagName('tr');
+    const filter = input.value.toUpperCase();
+
+    for (let i = 1; i < tr.length; i++) {
+      const td = tr[i].getElementsByTagName('td');
+      let found = false;
+      
+      for (let j = 0; j < td.length - 1; j++) {
+        const txtValue = td[j].textContent || td[j].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          found = true;
+          break;
+        }
+      }
+      
+      tr[i].style.display = found ? '' : 'none';
+    }
+  }
+
+  function filterTeachersTable() {
+    const input = document.getElementById('searchTeachersInput');
+    const table = document.getElementById('teachersTable');
     const tr = table.getElementsByTagName('tr');
     const filter = input.value.toUpperCase();
 

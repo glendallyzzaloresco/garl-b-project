@@ -21,14 +21,13 @@ class CourseController extends Controller
 
     public function index(Request $request)
     {
-        $query = Course::query()->with('degree');
+        $courses = Course::with(['degree', 'students'])
+            ->orderBy('course_name')
+            ->get()
+            ->groupBy(function($course) {
+                return $course->degree ? $course->degree->degree_title : 'Other';
+            });
         
-        // Filter by degree if provided
-        if ($request->has('degree_id') && $request->degree_id != '') {
-            $query->where('degree_id', $request->degree_id);
-        }
-        
-        $courses = $query->orderBy('course_name')->get();
         $degrees = \App\Models\Degree::orderBy('degree_title')->get();
         
         return view('courses', compact('courses', 'degrees'));
@@ -43,7 +42,8 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'course_name' => 'required|string|max:255|unique:courses,course_name',
+            'course_code' => 'required|string|max:50|unique:courses,course_code',
+            'course_name' => 'required|string|max:255',
             'degree_id' => 'nullable|exists:degrees,id',
         ]);
 
@@ -63,7 +63,8 @@ class CourseController extends Controller
     public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
-            'course_name' => 'required|string|max:255|unique:courses,course_name,' . $course->id,
+            'course_code' => 'required|string|max:50|unique:courses,course_code,' . $course->id,
+            'course_name' => 'required|string|max:255',
             'degree_id' => 'nullable|exists:degrees,id',
         ]);
 

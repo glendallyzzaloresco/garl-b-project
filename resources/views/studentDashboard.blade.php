@@ -533,7 +533,7 @@
           @if($student->courses && $student->courses->count() > 0)
             <div class="course-chips">
               @foreach($student->courses as $course)
-                <span class="course-chip">{{ $course->course_name }}</span>
+                <span class="course-chip">{{ $course->course_code }} - {{ $course->course_name }}</span>
               @endforeach
             </div>
           @else

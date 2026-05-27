@@ -116,16 +116,48 @@ class PagesController extends Controller
     public function teacherDashboard()
     {
         $user_id = Session::get('user_id');
-        $teacher = UserAccount::find($user_id);
+        $user = UserAccount::find($user_id);
         
-        if (!$teacher || $teacher->role !== 'teacher') {
+        if (!$user || $user->role !== 'teacher') {
             return redirect('/')->with('error', 'Unauthorized access');
+        }
+
+        // Get the teacher record associated with this user account
+        $teacher = Teacher::where('user_account_id', $user->id)->first();
+        
+        if (!$teacher) {
+            return redirect('/')->with('error', 'Teacher record not found');
         }
 
         // Get courses assigned to this teacher with their enrolled students
         $courses = Course::where('teacher_id', $teacher->id)->with('students')->get();
         
-        return view('teacherDashboard', compact('teacher', 'courses'));
+        return view('teacherDashboard', compact('user', 'teacher', 'courses'));
+    }
+
+    /**
+     * Teacher Enrolled Students Page
+     */
+    public function teacherEnrolledStudents()
+    {
+        $user_id = Session::get('user_id');
+        $user = UserAccount::find($user_id);
+        
+        if (!$user || $user->role !== 'teacher') {
+            return redirect('/')->with('error', 'Unauthorized access');
+        }
+
+        // Get the teacher record associated with this user account
+        $teacher = Teacher::where('user_account_id', $user->id)->first();
+        
+        if (!$teacher) {
+            return redirect('/')->with('error', 'Teacher record not found');
+        }
+
+        // Get courses assigned to this teacher with their enrolled students
+        $courses = Course::where('teacher_id', $teacher->id)->with('students')->get();
+        
+        return view('teacherEnrolledStudents', compact('user', 'teacher', 'courses'));
     }
 
     /**
@@ -194,8 +226,8 @@ class PagesController extends Controller
      */
     public function createTeacher()
     {
-        $degrees = \App\Models\Degree::orderBy('degree_title')->get();
-        return view('addTeacher', compact('degrees'));
+        $courses = \App\Models\Course::orderBy('course_name')->get();
+        return view('addTeacher', compact('courses'));
     }
 
     /**
@@ -211,7 +243,7 @@ class PagesController extends Controller
             'contact_no' => 'required|digits:11',
             'username' => 'required|string|min:3|unique:user_accounts,username',
             'password' => 'required|string|min:6',
-            'degree_id' => 'nullable|integer|exists:degrees,id',
+            'course_id' => 'nullable|integer|exists:courses,id',
         ]);
 
         try {
@@ -233,8 +265,16 @@ class PagesController extends Controller
                 'lname' => $request->input('lname'),
                 'email' => $request->input('email'),
                 'phone' => $request->input('contact_no'),
-                'degree_id' => !empty($request->input('degree_id')) ? intval($request->input('degree_id')) : null,
             ]);
+
+            // Assign teacher to course if course_id is provided
+            if (!empty($request->input('course_id'))) {
+                $course = \App\Models\Course::find($request->input('course_id'));
+                if ($course) {
+                    $course->teacher_id = $teacher->id;
+                    $course->save();
+                }
+            }
 
             // Return JSON for AJAX requests
             if ($request->expectsJson() || $request->wantsJson()) {

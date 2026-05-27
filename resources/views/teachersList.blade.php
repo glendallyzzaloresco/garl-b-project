@@ -461,7 +461,7 @@
         <th>Name</th>
         <th>Email</th>
         <th>Contact</th>
-        <th>Department</th>
+        <th>Assigned Course</th>
         <th>Role</th>
         <th>Actions</th>
       </tr>
@@ -481,7 +481,16 @@
           </td>
           <td>{{ $teacher->email }}</td>
           <td>{{ $teacher->phone ?: 'N/A' }}</td>
-          <td>{{ $teacher->department ?: 'N/A' }}</td>
+          <td>
+            @php
+              $assignedCourse = \App\Models\Course::where('teacher_id', $teacher->id)->first();
+            @endphp
+            @if($assignedCourse)
+              <span style="color: #3B82F6; font-weight: 600;">{{ $assignedCourse->course_code }} - {{ $assignedCourse->course_name }}</span>
+            @else
+              <span style="color: #9CA3AF;">No course assigned</span>
+            @endif
+          </td>
           <td><span class="badge">👨‍🏫 Teacher</span></td>
           <td>
             <div class="action-cell">

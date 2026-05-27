@@ -1,6 +1,6 @@
 @extends('format.layout')
 
-@section('title', 'Manage Course: ' . $course->course_name)
+@section('title', 'Manage Course: ' . $course->course_code . ' - ' . $course->course_name)
 
 @section('content')
 
@@ -423,7 +423,7 @@ input[type="checkbox"] {
 
   {{-- Header Section --}}
   <div class="header-section">
-    <h1><i class="bi bi-book"></i> {{ $course->course_name }}</h1>
+    <h1><i class="bi bi-book"></i> {{ $course->course_code }} - {{ $course->course_name }}</h1>
     <div class="course-meta">
       <div class="meta-item">
         <strong>Total Students Enrolled:</strong>

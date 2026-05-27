@@ -22,8 +22,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 1.5rem;
+            gap: 2rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            flex-wrap: nowrap;
+            overflow: visible;
         }
 
         .teacher-brand {
@@ -32,26 +34,30 @@
             letter-spacing: -0.5px;
             color: white;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .teacher-nav {
             list-style: none;
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            gap: 0.5rem;
             align-items: center;
             margin: 0;
             padding: 0;
+            flex: 1;
+            justify-content: flex-end;
+            flex-wrap: nowrap;
         }
 
         .teacher-nav li {
             margin: 0;
+            flex-shrink: 0;
         }
 
         .teacher-nav a {
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
-            font-size: 1rem;
+            font-size: 0.95rem;
             padding: 0.5rem 1rem;
             border-radius: 0.375rem;
             transition: all 0.2s ease;
@@ -69,12 +75,16 @@
         .teacher-logout {
             background-color: #dc2626 !important;
             color: white !important;
-            margin-left: auto;
+            padding: 0.5rem 1rem !important;
+            border-radius: 0.375rem !important;
+            position: relative;
+            z-index: 1001;
         }
 
         .teacher-logout:hover {
             background-color: #b91c1c !important;
             color: white !important;
+            text-decoration: none !important;
         }
 
         .teacher-logout i {
@@ -94,6 +104,7 @@
             <h1 class="teacher-brand">Teacher Dashboard</h1>
             <ul class="teacher-nav">
                 <li><a href="{{ route('teacher.dashboard') }}"><i class="bi bi-house"></i> Dashboard</a></li>
+                <li><a href="{{ route('teacher.enrolled.students') }}"><i class="bi bi-people"></i> My Students</a></li>
                 <li><a href="{{ route('user.logout') }}" class="teacher-logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
             </ul>
         </header>

@@ -284,7 +284,7 @@ tbody tr:last-child td {
                   @if($student->courses->count() > 0)
                     @foreach($student->courses as $course)
                       <span class="course-badge">
-                        {{ $course->course_name }}
+                        {{ $course->course_code }} - {{ $course->course_name }}
                       </span>
                     @endforeach
                   @else

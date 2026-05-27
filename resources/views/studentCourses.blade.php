@@ -148,7 +148,7 @@
               $isEnrolled = in_array($course->id, $enrolledCourseIds, true);
             @endphp
             <tr>
-              <td style="font-weight: 700; color: var(--text);">{{ $course->course_name }}</td>
+              <td style="font-weight: 700; color: var(--text);">{{ $course->course_code }} - {{ $course->course_name }}</td>
               <td>
                 @if($isEnrolled)
                   <span class="badge badge-enrolled">Enrolled</span>

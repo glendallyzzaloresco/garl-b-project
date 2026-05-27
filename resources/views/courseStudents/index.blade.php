@@ -291,28 +291,49 @@
     </div>
   @endif
 
-  {{-- Courses Grid --}}
+  {{-- Courses Grid Organized by Degree --}}
   @if($courses->count() > 0)
-    <div class="courses-grid">
-      @foreach($courses as $course)
-        <a href="{{ route('course-students.show', ['course' => $course->id]) }}" class="course-card">
-          <div class="course-icon">
-            <i class="bi bi-book"></i>
-          </div>
-          <div class="course-name">{{ $course->course_name }}</div>
-          <div class="course-info">
-            <i class="bi bi-people-fill"></i>
-            <span class="student-count">{{ $course->students_count }} Student{{ $course->students_count !== 1 ? 's' : '' }}</span>
-          </div>
-          @if($course->teacher)
-            <div class="course-info" style="margin-top: 0.5rem;">
-              <i class="bi bi-person-circle"></i>
-              <span>{{ $course->teacher->fname }} {{ $course->teacher->lname }}</span>
-            </div>
-          @endif
-        </a>
-      @endforeach
-    </div>
+    @foreach($courses as $degreeName => $courseList)
+      <div style="margin-bottom: 3rem;">
+        {{-- Degree Header --}}
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border);">
+          <i class="bi bi-mortarboard" style="font-size: 1.3rem; color: var(--blue);"></i>
+          <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--text); margin: 0;">{{ $degreeName }}</h3>
+          <span style="background: var(--blue); color: white; padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-left: auto;">{{ $courseList->count() }} Course{{ $courseList->count() !== 1 ? 's' : '' }}</span>
+        </div>
+        
+        {{-- Courses Grid --}}
+        <div class="courses-grid">
+          @foreach($courseList as $course)
+            <a href="{{ route('course-students.show', ['course' => $course->id]) }}" class="course-card">
+              <div class="course-icon">
+                <i class="bi bi-book"></i>
+              </div>
+              <div class="course-name">{{ $course->course_code }} - {{ $course->course_name }}</div>
+              
+              {{-- Student Count --}}
+              <div class="course-info">
+                <i class="bi bi-people-fill"></i>
+                <span class="student-count">{{ $course->students_count }} Student{{ $course->students_count !== 1 ? 's' : '' }}</span>
+              </div>
+              
+              {{-- Teacher Info --}}
+              @if($course->teacher)
+                <div class="course-info" style="margin-top: 0.5rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                  <i class="bi bi-person-circle"></i>
+                  <span style="font-weight: 600; color: var(--text);">{{ $course->teacher->fname }} {{ $course->teacher->lname }}</span>
+                </div>
+              @else
+                <div class="course-info" style="margin-top: 0.5rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                  <i class="bi bi-exclamation-circle"></i>
+                  <span style="color: var(--text-2); font-style: italic;">No teacher assigned</span>
+                </div>
+              @endif
+            </a>
+          @endforeach
+        </div>
+      </div>
+    @endforeach
   @else
     <div class="empty-state">
       <i class="bi bi-inbox"></i>

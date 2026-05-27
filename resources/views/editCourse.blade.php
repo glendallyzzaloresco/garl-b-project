@@ -61,6 +61,24 @@
     outline: none;
   }
 
+  textarea {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  textarea:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
   select {
     width: 100%;
     margin-top: 0.5rem;
@@ -117,8 +135,14 @@
       @csrf
       @method('PUT')
 
-      <label for="course_name">Course name</label>
-      <input id="course_name" type="text" name="course_name" value="{{ old('course_name', $course->course_name) }}" required>
+      <label for="course_code">Course Code</label>
+      <input id="course_code" type="text" name="course_code" value="{{ old('course_code', $course->course_code) }}" required>
+      @error('course_code')
+        <div class="error">{{ $message }}</div>
+      @enderror
+
+      <label for="course_name">Course Name</label>
+      <textarea id="course_name" name="course_name" placeholder="e.g. Introduction to Computer Science" required>{{ old('course_name', $course->course_name) }}</textarea>
       @error('course_name')
         <div class="error">{{ $message }}</div>
       @enderror

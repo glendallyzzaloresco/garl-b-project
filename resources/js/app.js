@@ -423,14 +423,19 @@ $(document).ready(function() {
         console.log('Save Student button clicked');
         
         try {
-            let fname = $('#fname').val().trim();
-            let mname = $('#mname').val().trim();
-            let lname = $('#lname').val().trim();
-            let email = $('#email').val().trim();
-            let contactInfo = $('#contactInfo').val().trim();
-            let degree_id = $('#degree_id').val();
-            let username = $('#username').val().trim();
-            let password = $('#password').val();
+            // Only proceed if student form fields exist
+            if ($('#fname').length === 0) {
+                return; // Not on student form, don't proceed
+            }
+            
+            let fname = ($('#fname').val() || '').trim();
+            let mname = ($('#mname').val() || '').trim();
+            let lname = ($('#lname').val() || '').trim();
+            let email = ($('#email').val() || '').trim();
+            let contactInfo = ($('#contactInfo').val() || '').trim();
+            let degree_id = $('#degree_id').val() || '';
+            let username = ($('#username').val() || '').trim();
+            let password = ($('#password').val() || '').trim();
             let course_ids = $('input[name="course_ids[]"]:checked').map(function() { return $(this).val(); }).get();
             
             // Validate required fields
@@ -722,13 +727,12 @@ $(document).ready(function() {
 
           try {
             const teacherId = $(this).data('teacher-id');
-            let f_name = $('#f_name').val().trim();
-            let m_name = $('#m_name').val().trim();
-            let l_name = $('#l_name').val().trim();
-            let e_mail = $('#e_mail').val().trim();
-            let phone = $('#phone').val().trim();
-            let department = $('#department').val().trim();
-            let degree_id = $('#degree_id').val();
+            let f_name = ($('#f_name').val() || '').trim();
+            let m_name = ($('#m_name').val() || '').trim();
+            let l_name = ($('#l_name').val() || '').trim();
+            let e_mail = ($('#e_mail').val() || '').trim();
+            let phone = ($('#phone').val() || '').trim();
+            let course_id = $('#course_id').val();
 
             if (!f_name || !l_name || !e_mail) {
               showToast('Please fill in all required fields', 'error');
@@ -754,8 +758,7 @@ $(document).ready(function() {
                 l_name: l_name,
                 e_mail: e_mail,
                 phone: phone,
-                department: department,
-                degree_id: degree_id,
+                course_id: course_id,
               },
               success: function(response) {
                 showToast(response.message || 'Teacher updated successfully.', 'success');

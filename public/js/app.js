@@ -161,13 +161,12 @@ $(document).ready(function() {
  
     $('#updateTeacher').click(function(e) {
         e.preventDefault();
-        let f_name = $('#f_name').val();
-        let m_name = $('#m_name').val();
-        let l_name = $('#l_name').val();
-        let e_mail = $('#e_mail').val();
-        let phone = $('#phone').val();
-        let department = $('#department').val();
-        let degree_id = $('#degree_id').val();
+        let f_name = ($('#f_name').val() || '').trim();
+        let m_name = ($('#m_name').val() || '').trim();
+        let l_name = ($('#l_name').val() || '').trim();
+        let e_mail = ($('#e_mail').val() || '').trim();
+        let phone = ($('#phone').val() || '').trim();
+        let course_id = $('#course_id').val() || '';
         let teacherId = $(this).attr('data-teacher-id');
         
         // Validate required fields
@@ -190,8 +189,7 @@ $(document).ready(function() {
                 l_name: l_name,
                 e_mail: e_mail,
                 phone: phone,
-                department: department,
-                degree_id: degree_id
+                course_id: course_id
             },
             success: function(response) {
                 console.log('Success response:', response);
@@ -239,14 +237,19 @@ $(document).ready(function() {
     $('#saveStudent').click(
         function() {
        try {
-       let fname = $('#fname').val().trim();
-       let mname = $('#mname').val().trim();
-       let lname = $('#lname').val().trim();
-       let email = $('#email').val().trim();
-       let contactInfo = $('#contactInfo').val().trim();
-       let degree_id = $('#degree_id').val();
-       let username = $('#username').val().trim();
-       let password = $('#password').val();
+       // Only proceed if student form fields exist
+       if ($('#fname').length === 0) {
+           return; // Not on student form, don't proceed
+       }
+       
+       let fname = ($('#fname').val() || '').trim();
+       let mname = ($('#mname').val() || '').trim();
+       let lname = ($('#lname').val() || '').trim();
+       let email = ($('#email').val() || '').trim();
+       let contactInfo = ($('#contactInfo').val() || '').trim();
+       let degree_id = $('#degree_id').val() || '';
+       let username = ($('#username').val() || '').trim();
+       let password = ($('#password').val() || '').trim();
        
        // Validate required fields
        if (!fname || !lname || !email || !contactInfo || !degree_id || !username || !password) {
